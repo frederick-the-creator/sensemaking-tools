@@ -1,0 +1,221 @@
+{
+  "contents": [
+    {
+      "title": "## Introduction",
+      "text": "This report summarizes the results of public input, encompassing:\n * __6 statements__\n * __70 votes__\n * 2 topics\n * 5 subtopics\n\nAll voters were anonymous."
+    },
+    {
+      "title": "## Overview",
+      "text": "Below is a high level overview of the topics discussed in the conversation, as well as the percentage of statements categorized under each topic. Note that the percentages may add up to greater than 100% when statements fall under more than one topic.\n\n* **Economic Policy (50%):**  This topic did not have enough statements to generate a summary.\n* **Environmental Concerns (50%):** The conversation around environmental concerns highlighted the importance of clean water, especially clean rivers, for both human and environmental health, and explored the link between environmental health and economic prosperity."
+    },
+    {
+      "title": "## Top 5 Most Discussed Subtopics",
+      "text": "5 subtopics of discussion emerged. These 5 subtopics had the most statements submitted.",
+      "subContents": [
+        {
+          "title": "### 1. Water Pollution (2 statements)",
+          "text": "",
+          "subContents": [
+            {
+              "title": "Prominent themes were:",
+              "text": "* Clean water necessity\n* Economic benefits of healthy environment\n"
+            }
+          ]
+        },
+        {
+          "title": "### 2. Minimum Wage (1 statements)",
+          "text": "",
+          "subContents": [
+            {
+              "title": "Prominent themes were:",
+              "text": "* Minimum wage increase\n* Living wage\n* Poverty reduction\n* Business impact\n* Worker rights \n"
+            }
+          ]
+        },
+        {
+          "title": "### 3. Small Business (1 statements)",
+          "text": "",
+          "subContents": [
+            {
+              "title": "Prominent themes were:",
+              "text": "* Impact on small businesses\n* Brighton businesses\n* Local business concerns\n* Small business vulnerability\n* Economic effects on small businesses\n"
+            }
+          ]
+        },
+        {
+          "title": "### 4. Job Growth (1 statements)",
+          "text": "",
+          "subContents": [
+            {
+              "title": "Prominent themes were:",
+              "text": "* Modest job growth\n* Limited job creation\n* Small employment impact\n* Minimal job gains\n* Insignificant job effects \n"
+            }
+          ]
+        },
+        {
+          "title": "### 5. Air Pollution (1 statements)",
+          "text": "",
+          "subContents": [
+            {
+              "title": "Prominent themes were:",
+              "text": "* Increasing air pollution\n* Air pollution health impacts\n* Air pollution sources\n* Air pollution solutions\n* Air quality monitoring/measurement\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "## Topics",
+      "text": "From the statements submitted, 2 high level topics were identified, as well as 5 subtopics. Based on voting patterns both points of common ground as well as differences of opinion have been identified and are described below.\n",
+      "subContents": [
+        {
+          "title": "### Economic Policy (3 statements)",
+          "text": "",
+          "subContents": []
+        },
+        {
+          "title": "### Environmental Concerns (3 statements)",
+          "text": "This topic included 1 subtopic, comprising a total of 3 statements.",
+          "subContents": [
+            {
+              "title": "#### Water Pollution (2 statements)",
+              "text": "This subtopic had high alignment compared to the other subtopics.",
+              "subContents": [
+                {
+                  "title": "Prominent themes were: ",
+                  "text": "* **Clean Water Necessity**: Some statements emphasize the importance of clean rivers.\n* **Economic Benefits of Healthy Environments**:  Some statements connect healthy environments, such as green pastures, with positive economic outcomes for businesses. \n"
+                },
+                {
+                  "title": "Common ground: ",
+                  "text": "No statements met the thresholds necessary to be considered as a point of common ground (at least 20 votes, and at least 70% agreement).",
+                  "citations": []
+                },
+                {
+                  "title": "Differences of opinion: ",
+                  "text": "No statements met the thresholds necessary to be considered as a significant difference of opinion (at least 20 votes, and both an agreement rate and disagree rate between 40%% and 60%%).",
+                  "citations": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "comments": [
+    {
+      "text": "I think we should raise the minimum wage to £15.",
+      "id": "1",
+      "voteInfo": {
+        "agreeCount": 10,
+        "disagreeCount": 3,
+        "passCount": 0
+      },
+      "topics": [
+        {
+          "name": "Economic Policy",
+          "subtopics": [
+            {
+              "name": "Minimum Wage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "That will hurt small businesses in Brighton.",
+      "id": "2",
+      "voteInfo": {
+        "agreeCount": 4,
+        "disagreeCount": 8,
+        "passCount": 1
+      },
+      "topics": [
+        {
+          "name": "Economic Policy",
+          "subtopics": [
+            {
+              "name": "Small Business"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Studies show only a modest impact on jobs.",
+      "id": "3",
+      "voteInfo": {
+        "agreeCount": 9,
+        "disagreeCount": 2,
+        "passCount": 0
+      },
+      "topics": [
+        {
+          "name": "Economic Policy",
+          "subtopics": [
+            {
+              "name": "Job Growth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "We need clean rivers.",
+      "id": "4",
+      "voteInfo": {
+        "agreeCount": 9,
+        "disagreeCount": 2,
+        "passCount": 0
+      },
+      "topics": [
+        {
+          "name": "Environmental Concerns",
+          "subtopics": [
+            {
+              "name": "Water Pollution"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Air pollution is increasing.",
+      "id": "5",
+      "voteInfo": {
+        "agreeCount": 9,
+        "disagreeCount": 2,
+        "passCount": 0
+      },
+      "topics": [
+        {
+          "name": "Environmental Concerns",
+          "subtopics": [
+            {
+              "name": "Air Pollution"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Green pastures are good for businesses.",
+      "id": "6",
+      "voteInfo": {
+        "agreeCount": 9,
+        "disagreeCount": 2,
+        "passCount": 0
+      },
+      "topics": [
+        {
+          "name": "Environmental Concerns",
+          "subtopics": [
+            {
+              "name": "Water Pollution"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

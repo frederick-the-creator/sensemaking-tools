@@ -15,6 +15,10 @@
 // Setup to run tests quietly, suppressing all logs, warnings, and errors for passing tests.
 // When a test fails, Jest will still report the failure details.
 
+if (typeof global.structuredClone !== "function") {
+  global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
+}
+
 const originalConsole = { ...console };
 
 beforeAll(() => {
