@@ -1,0 +1,115 @@
+[
+  {
+    "name": "Economic Impact",
+    "commentCount": 32,
+    "voteCount": 823,
+    "relativeAlignment": "moderately low alignment",
+    "relativeEngagement": "high engagement",
+    "subtopicStats": [
+      {
+        "name": "Overall Economic Growth",
+        "commentCount": 27,
+        "voteCount": 489,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      },
+      {
+        "name": "Consumer Spending",
+        "commentCount": 4,
+        "voteCount": 269,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      },
+      {
+        "name": "Business Profits",
+        "commentCount": 2,
+        "voteCount": 170,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      }
+    ]
+  },
+  {
+    "name": "Minimum Wage",
+    "commentCount": 16,
+    "voteCount": 1065,
+    "relativeAlignment": "high alignment",
+    "relativeEngagement": "high engagement",
+    "subtopicStats": [
+      {
+        "name": "Living Wage",
+        "commentCount": 9,
+        "voteCount": 599,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      },
+      {
+        "name": "Impact on Small Businesses",
+        "commentCount": 5,
+        "voteCount": 326,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      },
+      {
+        "name": "Wage Inequality",
+        "commentCount": 2,
+        "voteCount": 140,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      }
+    ]
+  },
+  {
+    "name": "Small Business",
+    "commentCount": 8,
+    "voteCount": 590,
+    "relativeAlignment": "moderately low alignment",
+    "relativeEngagement": "high engagement",
+    "subtopicStats": [
+      {
+        "name": "Business Survival",
+        "commentCount": 5,
+        "voteCount": 353,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      },
+      {
+        "name": "Impact On Small Businesses",
+        "commentCount": 3,
+        "voteCount": 237,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      }
+    ]
+  },
+  {
+    "name": "Automation",
+    "commentCount": 4,
+    "voteCount": 257,
+    "relativeAlignment": "moderately low alignment",
+    "relativeEngagement": "moderately low engagement",
+    "subtopicStats": [
+      {
+        "name": "Robotics and Automation",
+        "commentCount": 3,
+        "voteCount": 216,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      },
+      {
+        "name": "Impact on Unskilled Labor",
+        "commentCount": 3,
+        "voteCount": 158,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      },
+      {
+        "name": "Universal Basic Income",
+        "commentCount": 1,
+        "voteCount": 41,
+        "relativeAlignment": "high alignment",
+        "relativeEngagement": "high engagement"
+      }
+    ]
+  }
+]

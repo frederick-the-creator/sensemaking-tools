@@ -1,0 +1,6 @@
+pandas
+numpy
+pytest
+google-cloud-aiplatform
+google
+google-genai
