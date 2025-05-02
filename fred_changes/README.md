@@ -8,7 +8,6 @@
 ---
 
 ## 2. Update Your Local Repository Remotes
-
 Since you've already cloned the original repository and made changes, you can reconfigure your remotes to point to your fork.
 
 ### Rename the current origin remote to `upstream`:
