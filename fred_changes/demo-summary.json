@@ -6,59 +6,59 @@
     },
     {
       "title": "## Overview",
-      "text": "Below is a high level overview of the topics discussed in the conversation, as well as the percentage of statements categorized under each topic. Note that the percentages may add up to greater than 100% when statements fall under more than one topic.\n\n* **Economic Policy (50%):**  This topic did not have enough statements to generate a summary.\n* **Environmental Concerns (50%):** The conversation around environmental concerns highlighted the importance of clean water, especially clean rivers, for both human and environmental health, and explored the link between environmental health and economic prosperity."
+      "text": "Below is a high level overview of the topics discussed in the conversation, as well as the percentage of statements categorized under each topic. Note that the percentages may add up to greater than 100% when statements fall under more than one topic.\n\n* **Minimum Wage (50%):** The conversation around minimum wage focused on the economic impact of potential increases, with some statements supporting a £15 minimum wage and others expressing concern about potential job losses.\n* **Environmental Concerns (50%):**  This topic did not have enough statements to extract any meaningful insights from the conversation."
     },
     {
       "title": "## Top 5 Most Discussed Subtopics",
       "text": "5 subtopics of discussion emerged. These 5 subtopics had the most statements submitted.",
       "subContents": [
         {
-          "title": "### 1. Water Pollution (2 statements)",
+          "title": "### 1. Economic Impact (2 statements)",
           "text": "",
           "subContents": [
             {
               "title": "Prominent themes were:",
-              "text": "* Clean water necessity\n* Economic benefits of healthy environment\n"
+              "text": "* Minimum wage increase\n* Job market effects\n* Economic impact studies\n* Wage policy debates\n* Living wage arguments\n"
             }
           ]
         },
         {
-          "title": "### 2. Minimum Wage (1 statements)",
+          "title": "### 2. Business Impact (1 statements)",
           "text": "",
           "subContents": [
             {
               "title": "Prominent themes were:",
-              "text": "* Minimum wage increase\n* Living wage\n* Poverty reduction\n* Business impact\n* Worker rights \n"
+              "text": "* Negative impact on small businesses\n* Localized economic effects\n* Harm to specific geographic areas\n* Brighton's economy\n* Business vulnerability\n"
             }
           ]
         },
         {
-          "title": "### 3. Small Business (1 statements)",
+          "title": "### 3. Water Quality (1 statements)",
           "text": "",
           "subContents": [
             {
               "title": "Prominent themes were:",
-              "text": "* Impact on small businesses\n* Brighton businesses\n* Local business concerns\n* Small business vulnerability\n* Economic effects on small businesses\n"
+              "text": "* Clean water necessity\n* River health\n"
             }
           ]
         },
         {
-          "title": "### 4. Job Growth (1 statements)",
+          "title": "### 4. Air Quality (1 statements)",
           "text": "",
           "subContents": [
             {
               "title": "Prominent themes were:",
-              "text": "* Modest job growth\n* Limited job creation\n* Small employment impact\n* Minimal job gains\n* Insignificant job effects \n"
+              "text": "* Air pollution increasing\n* Air quality degradation\n* Health impacts of poor air\n* Sources of air pollution\n* Air quality monitoring/measurement\n"
             }
           ]
         },
         {
-          "title": "### 5. Air Pollution (1 statements)",
+          "title": "### 5. Land Use (1 statements)",
           "text": "",
           "subContents": [
             {
               "title": "Prominent themes were:",
-              "text": "* Increasing air pollution\n* Air pollution health impacts\n* Air pollution sources\n* Air pollution solutions\n* Air quality monitoring/measurement\n"
+              "text": "* Economic benefits of green spaces\n* Land use planning\n* Environmental protection\n* Agricultural land preservation\n* Rural development\n"
             }
           ]
         }
@@ -69,21 +69,16 @@
       "text": "From the statements submitted, 2 high level topics were identified, as well as 5 subtopics. Based on voting patterns both points of common ground as well as differences of opinion have been identified and are described below.\n",
       "subContents": [
         {
-          "title": "### Economic Policy (3 statements)",
-          "text": "",
-          "subContents": []
-        },
-        {
-          "title": "### Environmental Concerns (3 statements)",
+          "title": "### Minimum Wage (3 statements)",
           "text": "This topic included 1 subtopic, comprising a total of 3 statements.",
           "subContents": [
             {
-              "title": "#### Water Pollution (2 statements)",
+              "title": "#### Economic Impact (2 statements)",
               "text": "This subtopic had high alignment compared to the other subtopics.",
               "subContents": [
                 {
                   "title": "Prominent themes were: ",
-                  "text": "* **Clean Water Necessity**: Some statements emphasize the importance of clean rivers.\n* **Economic Benefits of Healthy Environments**:  Some statements connect healthy environments, such as green pastures, with positive economic outcomes for businesses. \n"
+                  "text": "* **Minimum Wage Increase**: Some statements advocate for a minimum wage increase to £15.\n* **Employment Effects**:  Other statements mention the potential impact of minimum wage changes on employment levels.\n"
                 },
                 {
                   "title": "Common ground: ",
@@ -98,6 +93,11 @@
               ]
             }
           ]
+        },
+        {
+          "title": "### Environmental Concerns (3 statements)",
+          "text": "",
+          "subContents": []
         }
       ]
     }
@@ -113,10 +113,10 @@
       },
       "topics": [
         {
-          "name": "Economic Policy",
+          "name": "Minimum Wage",
           "subtopics": [
             {
-              "name": "Minimum Wage"
+              "name": "Economic Impact"
             }
           ]
         }
@@ -132,10 +132,10 @@
       },
       "topics": [
         {
-          "name": "Economic Policy",
+          "name": "Minimum Wage",
           "subtopics": [
             {
-              "name": "Small Business"
+              "name": "Business Impact"
             }
           ]
         }
@@ -151,10 +151,10 @@
       },
       "topics": [
         {
-          "name": "Economic Policy",
+          "name": "Minimum Wage",
           "subtopics": [
             {
-              "name": "Job Growth"
+              "name": "Economic Impact"
             }
           ]
         }
@@ -173,7 +173,7 @@
           "name": "Environmental Concerns",
           "subtopics": [
             {
-              "name": "Water Pollution"
+              "name": "Water Quality"
             }
           ]
         }
@@ -192,7 +192,7 @@
           "name": "Environmental Concerns",
           "subtopics": [
             {
-              "name": "Air Pollution"
+              "name": "Air Quality"
             }
           ]
         }
@@ -211,7 +211,7 @@
           "name": "Environmental Concerns",
           "subtopics": [
             {
-              "name": "Water Pollution"
+              "name": "Land Use"
             }
           ]
         }
