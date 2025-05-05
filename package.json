@@ -2,7 +2,7 @@
   "name": "sensemaking-tools",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "npm run test:ts && npm run test:py",
     "test:ts": "NODE_NO_WARNINGS=1 TFJS_NODE_GPU=false jest",
@@ -12,7 +12,8 @@
     "test-watch": "TFJS_NODE_GPU=false nodemon --watch src --watch runner-cli --ext 'ts,json' -x 'npm run test-silent --onlyChanged'",
     "prepare": "husky && husky install",
     "lint": "eslint . --fix --max-warnings=0",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

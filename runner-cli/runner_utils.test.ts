@@ -14,10 +14,11 @@
 
 import { getCommentsFromCsv, parseTopicsString } from "./runner_utils";
 import { Comment, VoteTally } from "../src/types";
-import { Readable } from "stream";
 
 // Mock FileStream to be able to test the reading of CSVs.
 jest.mock("fs", () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Readable } = require("stream");
   const actualFs = jest.requireActual("fs");
   let mockCsvData = "";
   let mockHeaderData = "";
