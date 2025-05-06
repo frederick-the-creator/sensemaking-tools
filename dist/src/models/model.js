@@ -18,7 +18,7 @@ exports.Model = void 0;
 class Model {
     constructor() {
         // The best batch size to use for categorization.
-        this.categorizationBatchSize = 100;
+        this.categorizationBatchSize = 20;
     }
 }
 exports.Model = Model;

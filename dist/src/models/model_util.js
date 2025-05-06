@@ -20,6 +20,6 @@ exports.MAX_RETRIES = 3;
 // The maximum number of times an LLM call should be retried (it's higher to avoid rate limits).
 exports.MAX_LLM_RETRIES = 9;
 // How long in milliseconds to wait between API calls.
-exports.RETRY_DELAY_MS = 10000; // 10 seconds
+exports.RETRY_DELAY_MS = 1000; // 1 seconds
 // Set default vertex parallelism based on similarly named environment variable, or default to 2
-exports.DEFAULT_VERTEX_PARALLELISM = parseInt(process.env["DEFAULT_VERTEX_PARALLELISM"] || "2");
+exports.DEFAULT_VERTEX_PARALLELISM = parseInt(process.env["DEFAULT_VERTEX_PARALLELISM"] || "4");

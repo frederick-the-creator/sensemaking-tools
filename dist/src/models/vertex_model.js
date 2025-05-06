@@ -45,7 +45,7 @@ class VertexModel extends model_1.Model {
      * @param modelName - the name of the model from Vertex AI's Model Garden to connect with, see
      * the full list here: https://cloud.google.com/model-garden
      */
-    constructor(project, location, modelName = "gemini-1.5-pro-002") {
+    constructor(project, location, modelName = "gemini-2.0-flash-lite") {
         super();
         this.vertexAI = new vertexai_1.VertexAI({
             project: project,
