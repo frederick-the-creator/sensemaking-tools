@@ -26,6 +26,7 @@ const runner_utils_1 = require("./runner_utils");
 const types_1 = require("../src/types");
 // Mock FileStream to be able to test the reading of CSVs.
 jest.mock("fs", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { Readable } = require("stream");
     const actualFs = jest.requireActual("fs");
     let mockCsvData = "";
