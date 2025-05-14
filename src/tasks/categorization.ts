@@ -71,8 +71,6 @@ export async function categorizeWithRetry(
         `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
       );
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
-    } else {
-      categorized = categorized.concat(assignDefaultCategory(uncategorized));
     }
   }
 
@@ -90,8 +88,8 @@ Important Considerations:
 - Ensure the assigned topic accurately reflects the meaning of the comment.
 - NEVER assign a comment to multiple topics.
 - Prioritize using the existing topics whenever possible.
-- All comments must be assigned one existing topic.
-- If no existing topic fits a comment well, assign it to the "Other" topic.
+- All comments must be assigned ONLY one existing topic.
+- If no existing topic fits a comment well, do not assign any topic.
 - Do not create any new topics that are not listed in the Input Topics.
 - Do not deviate from the exact wording of the Input Topics. NEVER USE "&" in the topic name.
 - When generating the JSON output, minimize the size of the response. For example, prefer this compact format: {"id": "5258", "topics": [{"name": "Arts, Culture, And Recreation"}]} instead of adding unnecessary whitespace or newlines.
