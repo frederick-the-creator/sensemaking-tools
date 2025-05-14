@@ -74,16 +74,16 @@ function categorizeWithRetry(model, instructions, inputComments, topics, additio
 }
 function topicCategorizationPrompt(topics) {
     return `
-For each of the following comments, identify the most relevant topic from the list below.
+For each of the following comments, identify the SINGLE most relevant topic from the list below.
 
 Input Topics:
 ${JSON.stringify(topics)}
 
 Important Considerations:
 - Ensure the assigned topic accurately reflects the meaning of the comment.
-- A comment can only be assigned to one topic. NEVER assign a comment to multiple topics.
+- NEVER assign a comment to multiple topics.
 - Prioritize using the existing topics whenever possible.
-- All comments must be assigned at least one existing topic.
+- All comments must be assigned one existing topic.
 - If no existing topic fits a comment well, assign it to the "Other" topic.
 - Do not create any new topics that are not listed in the Input Topics.
 - Do not deviate from the exact wording of the Input Topics. NEVER USE "&" in the topic name.
@@ -118,6 +118,10 @@ function validateCommentRecords(commentRecords, inputComments, topics) {
             return; // Skip to the next comment
         }
         if (hasInvalidTopicNames(comment, topicLookup)) {
+            commentsWithInvalidTopics.push(comment);
+            return; // Skip to the next comment
+        }
+        if (hasMultipleTopics(comment)) {
             commentsWithInvalidTopics.push(comment);
             return; // Skip to the next comment
         }
@@ -171,6 +175,18 @@ function hasEmptyTopicsOrSubtopics(comment) {
     }
     if (comment.topics.some((topic) => "subtopics" in topic && (!topic.subtopics || topic.subtopics.length === 0))) {
         console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
+        return true;
+    }
+    return false;
+}
+/**
+ * Checks if a comment has multiple topics assigned.
+ * @param comment The categorized comment to check.
+ * @returns True if the comment has more than one topic, false otherwise.
+ */
+function hasMultipleTopics(comment) {
+    if (comment.topics.length > 1) {
+        console.warn(`Comment with multiple topics: ${JSON.stringify(comment)}`);
         return true;
     }
     return false;
