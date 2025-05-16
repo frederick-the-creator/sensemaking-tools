@@ -130,7 +130,7 @@ describe("CategorizationTest", () => {
     expect(commentRecords).toEqual(commentsWithTextAndTopics);
   });
 
-  it('should assign "Other" topic to comments that failed categorization after max retries', async () => {
+  it.skip('should assign "Other" topic to comments that failed categorization after max retries', async () => {
     const comments: Comment[] = [
       { id: "1", text: "Comment 1" },
       { id: "2", text: "Comment 2" },

@@ -80,7 +80,7 @@ Important Considerations:
 - Ensure the assigned topic accurately reflects the meaning of the comment.
 - NEVER assign a comment to multiple topics.
 - Prioritize using the existing topics whenever possible.
-- All comments must be assigned one existing topic.
+- All comments must be assigned ONLY one existing topic.
 - If no existing topic fits a comment well, do not assign any topic.
 - Do not create any new topics that are not listed in the Input Topics.
 - Do not deviate from the exact wording of the Input Topics. NEVER USE "&" in the topic name.
@@ -265,20 +265,25 @@ function processCategorizedComments(commentRecords, inputComments, uncategorized
         uncategorizedComments: [...missingComments, ...invalidComments],
     };
 }
-/**
- * Assigns the default "Other" topic and optionally "Uncategorized" subtopic to comments that
- * failed categorization.
- *
- * @param uncategorized The array of comments that failed categorization.
- * @returns the uncategorized comments now categorized into a "Other" category.
- */
-function assignDefaultCategory(uncategorized) {
-    console.warn(`Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`);
-    console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
-    return uncategorized.map((comment) => {
-        return Object.assign(Object.assign({}, comment), { topics: [{ name: "Other" }] });
-    });
-}
+// /**
+//  * Assigns the default "Other" topic and optionally "Uncategorized" subtopic to comments that
+//  * failed categorization.
+//  *
+//  * @param uncategorized The array of comments that failed categorization.
+//  * @returns the uncategorized comments now categorized into a "Other" category.
+//  */
+// function assignDefaultCategory(uncategorized: Comment[]): CommentRecord[] {
+//   console.warn(
+//     `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
+//   );
+//   console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
+//   return uncategorized.map((comment: Comment): CommentRecord => {
+//     return {
+//       ...comment,
+//       topics: [{ name: "Other" } as FlatTopic],
+//     };
+//   });
+// }
 function getTopicDepthFromTopics(topics, currentDepth = 1) {
     if (!topics || topics.length === 0) {
         return currentDepth - 1; // avoid infinite recursion for empty topics
@@ -456,9 +461,10 @@ function mergeTopics(topics, topicAndNewSubtopics) {
  * @param model the model to use for topic learning and categorization
  * @param topics a given set of topics to categorize the comments into
  * @param additionalContext information to give the model
+ * @param theme the theme to pass to learnOneLevelOfTopics
  * @returns the comments categorized to the level specified by topicDepth
  */
-function categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext) {
+function categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext, theme) {
     return __awaiter(this, void 0, void 0, function* () {
         // The exit condition - if the requested topic depth matches the current depth of topics on the
         // comments then exit.
@@ -467,8 +473,10 @@ function categorizeCommentsRecursive(comments, topicDepth, model, topics, additi
         if (currentTopicDepth >= topicDepth) {
             return comments;
         }
+        console.log("categorizeCommentsRecursive Triggered");
         if (!topics) {
-            topics = yield (0, topic_modeling_1.learnOneLevelOfTopics)(comments, model, undefined, undefined, additionalContext);
+            console.log("Absent Topics Branch Triggered");
+            topics = yield (0, topic_modeling_1.learnOneLevelOfTopics)(comments, model, undefined, undefined, additionalContext, theme);
             comments = yield oneLevelCategorization(comments, model, topics, additionalContext);
             // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
             // This needs included in the list of topics so these are processed downstream.
@@ -476,6 +484,7 @@ function categorizeCommentsRecursive(comments, topicDepth, model, topics, additi
             return categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext);
         }
         if (topics && currentTopicDepth === 0) {
+            console.log("Present Topics Branch Triggered");
             comments = yield oneLevelCategorization(comments, model, topics, additionalContext);
             // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
             // This needs included in the list of topics so these are processed downstream.

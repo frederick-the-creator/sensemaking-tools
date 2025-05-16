@@ -47,15 +47,23 @@ Important Considerations:
 function learnSubtopicsForOneTopicPrompt(parentTopic, otherTopics) {
     var _a;
     const otherTopicNames = (_a = otherTopics === null || otherTopics === void 0 ? void 0 : otherTopics.map((topic) => topic.name).join(", ")) !== null && _a !== void 0 ? _a : "";
-    return `
-Analyze the following comments and identify relevant subtopics within the following topic:
+    console.log("Running Special Factor Prompt");
+    return `   
+These comments are related to the topic "${parentTopic.name}" and need to be categorized into subtopics.
+subtopics are the main levers or determinants that shape progress toward a topic. They explain how the topic can be advanced.
+For something to classify as a subtopic:
+  - There must be defensible evidence (research or lived experience) that changing the subtopic moves the topic.
+  - Stakeholders can design programmes or policies that influence it.
+  - Example path: topic "Community Resilience" has subtopic "Social Capital";
+
+  Analyze the following comments and identify relevant subtopics:
 "${parentTopic.name}"
 
 Important Considerations:
-- Use Title Case for topic and subtopic names. Do not use capital case like "name": "INFRASTRUCTURE".
+- Use Title Case for names. Do not use capital case like "name": "INFRASTRUCTURE".
 - When identifying subtopics, try to group similar concepts into one comprehensive subtopic instead of creating multiple, overly specific subtopics.
 - Try to create as few subtopics as possible
-- No subtopic should have the same name as the main topic.
+- Subtopics absolutely cannot have the same name as the main topic.
 - Do not change the name of the main topic ("${parentTopic.name}").
 - There are other topics that are being used on different sets of comments, do not use these topic names as subtopic names: ${otherTopicNames}
 
@@ -69,7 +77,7 @@ Example of Incorrect Output:
         { "name": "Business Growth" },
         { "name": "Small Business Development" },
         { "name": "Small Business Marketing" } // Incorrect: Too closely related to the "Small Business Development" subtopic
-        { "name": "Infrastructure & Transportation" } // Incorrect: This is the name of a main topic
+        { "name": "Economic Development" } // Incorrect: This is the name of a main topic
       ]
   }
 ]
@@ -79,11 +87,12 @@ Example of Incorrect Output:
  * Generates an LLM prompt for topic modeling of a set of comments.
  *
  * @param parentTopics - Optional. An array of top-level topics to use.
+ * @param theme - Optional theme string to include in the prompt.
  * @returns The generated prompt string.
  */
-function generateTopicModelingPrompt(parentTopic, otherTopics) {
-    if (parentTopic) {
-        return learnSubtopicsForOneTopicPrompt(parentTopic, otherTopics);
+function generateTopicModelingPrompt(parentTopic, otherTopics, theme) {
+    if (theme) {
+        return learnSubtopicsForOneTopicPrompt({ name: theme }, otherTopics);
     }
     else {
         return exports.LEARN_TOPICS_PROMPT;
@@ -97,10 +106,11 @@ function generateTopicModelingPrompt(parentTopic, otherTopics) {
  * @param otherTopics other topics that are being used, this is used
  * to avoid duplicate topic/subtopic names
  * @param additionalContext more info to give the model
+ * @param theme optional theme string to include in the prompt
  * @returns the topics that are present in the comments.
  */
-function learnOneLevelOfTopics(comments, model, topic, otherTopics, additionalContext) {
-    const instructions = generateTopicModelingPrompt(topic, otherTopics);
+function learnOneLevelOfTopics(comments, model, topic, otherTopics, additionalContext, theme) {
+    const instructions = generateTopicModelingPrompt(topic, otherTopics, theme);
     const schema = topic ? typebox_1.Type.Array(types_1.NestedTopic) : typebox_1.Type.Array(types_1.FlatTopic);
     return (0, sensemaker_utils_1.retryCall)(function (model) {
         return __awaiter(this, void 0, void 0, function* () {

@@ -69,7 +69,8 @@ export declare class Sensemaker {
      * categorization. The context will be appended verbatim to the prompt. This
      * should be 1-2 sentences on what the conversation is about and where it takes place.
      * @param topicDepth how many levels of topics to learn, from topic to sub-sub-topic
+     * @param theme Optional theme to pass to categorizeCommentsRecursive
      * @returns: The LLM's categorization.
      */
-    categorizeComments(comments: Comment[], includeSubtopics: boolean, topics?: Topic[], additionalContext?: string, topicDepth?: 1 | 2 | 3): Promise<Comment[]>;
+    categorizeComments(comments: Comment[], includeSubtopics: boolean, topics?: Topic[], additionalContext?: string, topicDepth?: 1 | 2 | 3, theme?: string): Promise<Comment[]>;
 }

@@ -9,9 +9,10 @@ export declare function learnSubtopicsForOneTopicPrompt(parentTopic: Topic, othe
  * Generates an LLM prompt for topic modeling of a set of comments.
  *
  * @param parentTopics - Optional. An array of top-level topics to use.
+ * @param theme - Optional theme string to include in the prompt.
  * @returns The generated prompt string.
  */
-export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTopics?: Topic[]): string;
+export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTopics?: Topic[], theme?: string): string;
 /**
  * Learn either topics or subtopics from the given comments.
  * @param comments the comments to consider
@@ -20,9 +21,10 @@ export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTo
  * @param otherTopics other topics that are being used, this is used
  * to avoid duplicate topic/subtopic names
  * @param additionalContext more info to give the model
+ * @param theme optional theme string to include in the prompt
  * @returns the topics that are present in the comments.
  */
-export declare function learnOneLevelOfTopics(comments: Comment[], model: Model, topic?: Topic, otherTopics?: Topic[], additionalContext?: string): Promise<Topic[]>;
+export declare function learnOneLevelOfTopics(comments: Comment[], model: Model, topic?: Topic, otherTopics?: Topic[], additionalContext?: string, theme?: string): Promise<Topic[]>;
 /**
  * Validates the topic modeling response from the LLM.
  *

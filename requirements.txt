@@ -1,6 +1,7 @@
 pandas
 numpy
 pytest
+pytest-asyncio
 google-cloud-aiplatform
 google
 google-genai
