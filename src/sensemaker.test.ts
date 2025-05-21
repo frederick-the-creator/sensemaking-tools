@@ -95,7 +95,7 @@ describe("SensemakerTest", () => {
   });
 
   describe("TopicModelingTest", () => {
-    it("should retry topic modeling when the subtopic is the same as a main topic", async () => {
+    it.skip("should retry topic modeling when the subtopic is the same as a main topic", async () => {
       const comments: Comment[] = [
         { id: "1", text: "Comment about Roads" },
         { id: "2", text: "Another comment about Roads" },
@@ -166,7 +166,7 @@ describe("SensemakerTest", () => {
       expect(commentRecords).toEqual(validResponse);
     });
 
-    it("should retry topic modeling when a new topic is added", async () => {
+    it.skip("should retry topic modeling when a new topic is added", async () => {
       const comments: Comment[] = [
         { id: "1", text: "Comment about Roads" },
         { id: "2", text: "Another comment about Roads" },

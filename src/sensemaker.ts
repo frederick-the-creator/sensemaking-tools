@@ -148,6 +148,7 @@ export class Sensemaker {
    * should be 1-2 sentences on what the conversation is about and where it takes place.
    * @param topicDepth how many levels of topics to learn, from topic to sub-sub-topic
    * @param theme Optional theme to pass to categorizeCommentsRecursive
+   * @param factor Optional factor to pass to categorizeCommentsRecursive
    * @returns: The LLM's categorization.
    */
   public async categorizeComments(
@@ -156,7 +157,8 @@ export class Sensemaker {
     topics?: Topic[],
     additionalContext?: string,
     topicDepth?: 1 | 2 | 3,
-    theme?: string
+    theme?: string,
+    factor?: string
   ): Promise<Comment[]> {
     const startTime = performance.now();
     if (!includeSubtopics && topicDepth && topicDepth > 1) {
@@ -171,7 +173,8 @@ export class Sensemaker {
       this.getModel("categorizationModel"),
       topics,
       additionalContext,
-      theme
+      theme,
+      factor
     );
 
     console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);
