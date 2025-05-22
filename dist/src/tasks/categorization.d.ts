@@ -51,7 +51,8 @@ export declare function getTopicDepthFromTopics(topics: Topic[], currentDepth?: 
  * @param topics a given set of topics to categorize the comments into
  * @param additionalContext information to give the model
  * @param theme the theme to pass to learnOneLevelOfTopics
+ * @param factor the factor to pass to learnOneLevelOfTopics
  * @returns the comments categorized to the level specified by topicDepth
  */
-export declare function categorizeCommentsRecursive(comments: Comment[], topicDepth: 1 | 2 | 3, model: Model, topics?: Topic[], additionalContext?: string, theme?: string): Promise<Comment[]>;
+export declare function categorizeCommentsRecursive(comments: Comment[], topicDepth: 1 | 2 | 3, model: Model, topics?: Topic[], additionalContext?: string, theme?: string, factor?: string): Promise<Comment[]>;
 export declare function oneLevelCategorization(comments: Comment[], model: Model, topics: Topic[], additionalContext?: string): Promise<Comment[]>;

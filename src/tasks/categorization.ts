@@ -567,6 +567,7 @@ function mergeTopics(topics: Topic[], topicAndNewSubtopics: Topic): Topic[] {
  * @param topics a given set of topics to categorize the comments into
  * @param additionalContext information to give the model
  * @param theme the theme to pass to learnOneLevelOfTopics
+ * @param factor the factor to pass to learnOneLevelOfTopics
  * @returns the comments categorized to the level specified by topicDepth
  */
 export async function categorizeCommentsRecursive(
@@ -575,10 +576,9 @@ export async function categorizeCommentsRecursive(
   model: Model,
   topics?: Topic[],
   additionalContext?: string,
-  theme?: string
+  theme?: string,
+  factor?: string
 ): Promise<Comment[]> {
-  // The exit condition - if the requested topic depth matches the current depth of topics on the
-  // comments then exit.
   const currentTopicDepth = getTopicDepth(comments);
   console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
   if (currentTopicDepth >= topicDepth) {
@@ -593,11 +593,19 @@ export async function categorizeCommentsRecursive(
       undefined,
       undefined,
       additionalContext,
-      theme
+      theme,
+      factor
     );
-    comments = await oneLevelCategorization(comments, model, topics, additionalContext);
+    console.log("Topics returned from learnOneLevelOfTopics:", JSON.stringify(topics, null, 2));
+    const allSubtopics = topics.flatMap((t) =>
+      "subtopics" in t && t.subtopics ? t.subtopics : []
+    );
+    console.log("allSubtopics:", JSON.stringify(allSubtopics, null, 2));
+    comments = await oneLevelCategorization(comments, model, allSubtopics, additionalContext);
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
     // This needs included in the list of topics so these are processed downstream.
+    console.log("comments after oneLevelCategorization:", JSON.stringify(comments, null, 2));
+
     topics.push({ name: "Other" });
     return categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext);
   }
@@ -605,6 +613,7 @@ export async function categorizeCommentsRecursive(
   if (topics && currentTopicDepth === 0) {
     console.log("Present Topics Branch Triggered");
     comments = await oneLevelCategorization(comments, model, topics, additionalContext);
+    console.log("comments after oneLevelCategorization:", JSON.stringify(comments, null, 2));
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
     // This needs included in the list of topics so these are processed downstream.
     topics.push({ name: "Other" });
