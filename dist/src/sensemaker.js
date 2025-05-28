@@ -129,7 +129,7 @@ class Sensemaker {
      * @param factor Optional factor to pass to categorizeCommentsRecursive
      * @returns: The LLM's categorization.
      */
-    categorizeComments(comments, includeSubtopics, topics, additionalContext, topicDepth, theme, factor) {
+    categorizeComments(comments, includeSubtopics, topics, additionalContext, topicDepth, theme, factor, prompt_categorise_comments, prompt_learn_factor, prompt_learn_metrics) {
         return __awaiter(this, void 0, void 0, function* () {
             const startTime = performance.now();
             if (!includeSubtopics && topicDepth && topicDepth > 1) {
@@ -137,7 +137,7 @@ class Sensemaker {
             }
             // TODO: ensure the topics argument and the topics assigned to the passed in comments are in
             // sync.
-            const categorizedComments = yield (0, categorization_1.categorizeCommentsRecursive)(comments, includeSubtopics ? topicDepth || 2 : 1, this.getModel("categorizationModel"), topics, additionalContext, theme, factor);
+            const categorizedComments = yield (0, categorization_1.categorizeCommentsRecursive)(comments, includeSubtopics ? topicDepth || 2 : 1, this.getModel("categorizationModel"), topics, additionalContext, theme, factor, prompt_categorise_comments, prompt_learn_factor, prompt_learn_metrics);
             console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);
             return categorizedComments;
         });

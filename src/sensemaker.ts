@@ -158,7 +158,10 @@ export class Sensemaker {
     additionalContext?: string,
     topicDepth?: 1 | 2 | 3,
     theme?: string,
-    factor?: string
+    factor?: string,
+    prompt_categorise_comments?: string,
+    prompt_learn_factor?: string,
+    prompt_learn_metrics?: string
   ): Promise<Comment[]> {
     const startTime = performance.now();
     if (!includeSubtopics && topicDepth && topicDepth > 1) {
@@ -174,7 +177,10 @@ export class Sensemaker {
       topics,
       additionalContext,
       theme,
-      factor
+      factor,
+      prompt_categorise_comments,
+      prompt_learn_factor,
+      prompt_learn_metrics
     );
 
     console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);

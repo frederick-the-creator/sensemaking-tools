@@ -73,5 +73,5 @@ export declare class Sensemaker {
      * @param factor Optional factor to pass to categorizeCommentsRecursive
      * @returns: The LLM's categorization.
      */
-    categorizeComments(comments: Comment[], includeSubtopics: boolean, topics?: Topic[], additionalContext?: string, topicDepth?: 1 | 2 | 3, theme?: string, factor?: string): Promise<Comment[]>;
+    categorizeComments(comments: Comment[], includeSubtopics: boolean, topics?: Topic[], additionalContext?: string, topicDepth?: 1 | 2 | 3, theme?: string, factor?: string, prompt_categorise_comments?: string, prompt_learn_factor?: string, prompt_learn_metrics?: string): Promise<Comment[]>;
 }
