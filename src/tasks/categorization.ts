@@ -136,11 +136,6 @@ export function validateCommentRecords(
       return; // Skip to the next comment
     }
 
-    if (hasMultipleTopics(comment)) {
-      commentsWithInvalidTopics.push(comment);
-      return; // Skip to the next comment
-    }
-
     // If all checks pass, add the comment to the valid ones
     commentsPassedValidation.push(comment);
   });
@@ -198,19 +193,6 @@ function hasEmptyTopicsOrSubtopics(comment: CommentRecord): boolean {
     )
   ) {
     console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
-    return true;
-  }
-  return false;
-}
-
-/**
- * Checks if a comment has multiple topics assigned.
- * @param comment The categorized comment to check.
- * @returns True if the comment has more than one topic, false otherwise.
- */
-function hasMultipleTopics(comment: CommentRecord): boolean {
-  if (comment.topics.length > 1) {
-    console.warn(`Comment with multiple topics: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
