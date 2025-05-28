@@ -72,13 +72,12 @@ function categorizeWithRetry(model, instructions, inputComments, topics, additio
 function topicCategorizationPrompt(topics, prompt_categorise_comments) {
     if (prompt_categorise_comments) {
         console.log("Running Special Comment Categorization Prompt - Prompt_categorise_comments");
+        prompt_categorise_comments = prompt_categorise_comments.replace(/{{topics}}/g, JSON.stringify(topics));
         console.log("prompt_categorise_comments", prompt_categorise_comments);
-        prompt_categorise_comments = prompt_categorise_comments
-            .replace(/{{topics}}/g, JSON.stringify(topics));
         return prompt_categorise_comments;
     }
     else {
-        return 'No prompt provided';
+        return "No prompt provided";
     }
 }
 /**

@@ -50,10 +50,10 @@ function learnOneLevelOfTopicsPrompt(parentTopic, otherTopics, prompt_learn_fact
     console.log("Running Special Factor Prompt");
     if (prompt_learn_factor) {
         console.log("Running Special Factor Generation Prompt - Prompt_learn_factor");
-        console.log("prompt_learn_factor", prompt_learn_factor);
         prompt_learn_factor = prompt_learn_factor
             .replace(/{{parentTopicName}}/g, parentTopic.name)
             .replace(/{{otherTopicNames}}/g, otherTopicNames);
+        console.log("prompt_learn_factor", prompt_learn_factor);
         return prompt_learn_factor;
     }
     else if (prompt_learn_metrics) {
@@ -62,10 +62,11 @@ function learnOneLevelOfTopicsPrompt(parentTopic, otherTopics, prompt_learn_fact
         prompt_learn_metrics = prompt_learn_metrics
             .replace(/{{parentTopicName}}/g, parentTopic.name)
             .replace(/{{otherTopicNames}}/g, otherTopicNames);
+        console.log("prompt_learn_metrics", prompt_learn_metrics);
         return prompt_learn_metrics;
     }
     else {
-        return 'No prompt provided';
+        return "No prompt provided";
     }
 }
 // export function learnFactorForOneTopicPrompt(parentTopic: Topic, otherTopics?: Topic[]): string {
@@ -107,7 +108,7 @@ function learnOneLevelOfTopicsPrompt(parentTopic, otherTopics, prompt_learn_fact
 //   console.log("Running Special Metric Prompt");
 //   return `
 // These comments are related to the factor "${parentTopic.name}" and need to be categorized into metrics.
-// Metrics are concrete data points or statistics that directly operationalise a Factor. 
+// Metrics are concrete data points or statistics that directly operationalise a Factor.
 // Each metric is the number you place on a chart to monitor change in that factor.
 // A factor may be tracked by a suite of complementary metrics, each highlighting a distinct facet of the factor.
 // For something to classify as a metric:
