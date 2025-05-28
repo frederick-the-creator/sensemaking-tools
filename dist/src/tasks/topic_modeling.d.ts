@@ -4,8 +4,7 @@ import { Comment, Topic } from "../types";
  * @fileoverview Helper functions for performing topic modeling on sets of comments.
  */
 export declare const LEARN_TOPICS_PROMPT = "\nIdentify a 1-tiered hierarchical topic modeling of the following comments.\n\nImportant Considerations:\n- Use Title Case for topic names.\n- When identifying topics, try to group similar concepts into one comprehensive topic instead of creating multiple, overly specific topics.\n- Create as few topics as possible while covering all the comments.\n- Example topic names are: \"Education\", \"Environmental Sustainability\", \"Transportation\"\n- Bad topic names are like \"Community\" which is too vague\n";
-export declare function learnFactorForOneTopicPrompt(parentTopic: Topic, otherTopics?: Topic[]): string;
-export declare function learnMetricsForOneTopicPrompt(parentTopic: Topic, otherTopics?: Topic[]): string;
+export declare function learnOneLevelOfTopicsPrompt(parentTopic: Topic, otherTopics?: Topic[], prompt_learn_factor?: string, prompt_learn_metrics?: string): string;
 /**
  * Generates an LLM prompt for topic modeling of a set of comments.
  *
@@ -14,7 +13,7 @@ export declare function learnMetricsForOneTopicPrompt(parentTopic: Topic, otherT
  * @param factor - Optional factor string to include in the prompt.
  * @returns The generated prompt string.
  */
-export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTopics?: Topic[], theme?: string, factor?: string): string;
+export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTopics?: Topic[], theme?: string, factor?: string, prompt_learn_factor?: string, prompt_learn_metrics?: string): string;
 /**
  * Learn either topics or subtopics from the given comments.
  * @param comments the comments to consider
@@ -27,7 +26,7 @@ export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTo
  * @param factor optional factor string to include in the prompt
  * @returns the topics that are present in the comments.
  */
-export declare function learnOneLevelOfTopics(comments: Comment[], model: Model, topic?: Topic, otherTopics?: Topic[], additionalContext?: string, theme?: string, factor?: string): Promise<Topic[]>;
+export declare function learnOneLevelOfTopics(comments: Comment[], model: Model, topic?: Topic, otherTopics?: Topic[], additionalContext?: string, theme?: string, factor?: string, prompt_learn_factor?: string, prompt_learn_metrics?: string): Promise<Topic[]>;
 /**
  * Validates the topic modeling response from the LLM.
  *

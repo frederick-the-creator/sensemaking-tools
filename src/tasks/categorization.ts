@@ -77,23 +77,21 @@ export async function categorizeWithRetry(
   return categorized;
 }
 
-export function topicCategorizationPrompt(topics: Topic[]): string {
-  return `
-For each of the following comments, identify the SINGLE most relevant topic from the list below.
-
-Input Topics:
-${JSON.stringify(topics)}
-
-Important Considerations:
-- Ensure the assigned topic accurately reflects the meaning of the comment.
-- NEVER assign a comment to multiple topics.
-- Prioritize using the existing topics whenever possible.
-- All comments must be assigned ONLY one existing topic.
-- If no existing topic fits a comment well, do not assign any topic.
-- Do not create any new topics that are not listed in the Input Topics.
-- Do not deviate from the exact wording of the Input Topics. NEVER USE "&" in the topic name.
-- When generating the JSON output, minimize the size of the response. For example, prefer this compact format: {"id": "5258", "topics": [{"name": "Arts, Culture, And Recreation"}]} instead of adding unnecessary whitespace or newlines.
-`;
+export function topicCategorizationPrompt(
+  topics: Topic[],
+  prompt_categorise_comments?: string
+): string {
+  if (prompt_categorise_comments) {
+    console.log("Running Special Comment Categorization Prompt - Prompt_categorise_comments");
+    prompt_categorise_comments = prompt_categorise_comments.replace(
+      /{{topics}}/g,
+      JSON.stringify(topics)
+    );
+    console.log("prompt_categorise_comments", prompt_categorise_comments);
+    return prompt_categorise_comments;
+  } else {
+    return "No prompt provided";
+  }
 }
 
 /**
@@ -577,7 +575,10 @@ export async function categorizeCommentsRecursive(
   topics?: Topic[],
   additionalContext?: string,
   theme?: string,
-  factor?: string
+  factor?: string,
+  prompt_categorise_comments?: string,
+  prompt_learn_factor?: string,
+  prompt_learn_metrics?: string
 ): Promise<Comment[]> {
   const currentTopicDepth = getTopicDepth(comments);
   console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
@@ -594,14 +595,22 @@ export async function categorizeCommentsRecursive(
       undefined,
       additionalContext,
       theme,
-      factor
+      factor,
+      prompt_learn_factor,
+      prompt_learn_metrics
     );
     console.log("Topics returned from learnOneLevelOfTopics:", JSON.stringify(topics, null, 2));
     const allSubtopics = topics.flatMap((t) =>
       "subtopics" in t && t.subtopics ? t.subtopics : []
     );
     console.log("allSubtopics:", JSON.stringify(allSubtopics, null, 2));
-    comments = await oneLevelCategorization(comments, model, allSubtopics, additionalContext);
+    comments = await oneLevelCategorization(
+      comments,
+      model,
+      allSubtopics,
+      additionalContext,
+      prompt_categorise_comments
+    );
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
     // This needs included in the list of topics so these are processed downstream.
     console.log("comments after oneLevelCategorization:", JSON.stringify(comments, null, 2));
@@ -612,7 +621,13 @@ export async function categorizeCommentsRecursive(
 
   if (topics && currentTopicDepth === 0) {
     console.log("Present Topics Branch Triggered");
-    comments = await oneLevelCategorization(comments, model, topics, additionalContext);
+    comments = await oneLevelCategorization(
+      comments,
+      model,
+      topics,
+      additionalContext,
+      prompt_categorise_comments
+    );
     console.log("comments after oneLevelCategorization:", JSON.stringify(comments, null, 2));
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
     // This needs included in the list of topics so these are processed downstream.
@@ -666,9 +681,10 @@ export async function oneLevelCategorization(
   comments: Comment[],
   model: Model,
   topics: Topic[],
-  additionalContext?: string
+  additionalContext?: string,
+  prompt_categorise_comments?: string
 ): Promise<Comment[]> {
-  const instructions = topicCategorizationPrompt(topics);
+  const instructions = topicCategorizationPrompt(topics, prompt_categorise_comments);
   // TODO: Consider the effects of smaller batch sizes. 1 comment per batch was much faster, but
   // the distribution was significantly different from what we're currently seeing. More testing
   // is needed to determine the ideal size and distribution.
