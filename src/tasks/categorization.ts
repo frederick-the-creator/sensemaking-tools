@@ -83,11 +83,11 @@ export function topicCategorizationPrompt(
 ): string {
   if (prompt_categorise_comments) {
     console.log("Running Special Comment Categorization Prompt - Prompt_categorise_comments");
-    console.log("prompt_categorise_comments", prompt_categorise_comments);
     prompt_categorise_comments = prompt_categorise_comments.replace(
       /{{topics}}/g,
       JSON.stringify(topics)
     );
+    console.log("prompt_categorise_comments", prompt_categorise_comments);
     return prompt_categorise_comments;
   } else {
     return "No prompt provided";

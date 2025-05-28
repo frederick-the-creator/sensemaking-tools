@@ -44,10 +44,10 @@ export function learnOneLevelOfTopicsPrompt(
 
   if (prompt_learn_factor) {
     console.log("Running Special Factor Generation Prompt - Prompt_learn_factor");
-    console.log("prompt_learn_factor", prompt_learn_factor);
     prompt_learn_factor = prompt_learn_factor
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
+    console.log("prompt_learn_factor", prompt_learn_factor);
     return prompt_learn_factor;
   } else if (prompt_learn_metrics) {
     console.log("Running Special Metric Generation Prompt - Prompt_learn_metrics");
@@ -55,6 +55,7 @@ export function learnOneLevelOfTopicsPrompt(
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
+    console.log("prompt_learn_metrics", prompt_learn_metrics);
     return prompt_learn_metrics;
   } else {
     return "No prompt provided";
