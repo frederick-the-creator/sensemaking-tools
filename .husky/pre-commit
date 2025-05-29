@@ -1,2 +1,2 @@
-npm test
+cd library && npm run test:ts
 npx lint-staged
