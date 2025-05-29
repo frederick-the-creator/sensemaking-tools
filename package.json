@@ -1,9 +1,9 @@
 {
-  "name": "participation-project",
+  "name": "sensemaking-tools",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "library/dist/src/index.js",
+  "types": "library/dist/src/index.d.ts",
   "scripts": {
     "test": "npm run test:ts && npm run test:py",
     "test:ts": "NODE_NO_WARNINGS=1 TFJS_NODE_GPU=false jest",
