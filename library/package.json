@@ -11,7 +11,8 @@
     "test-watch": "TFJS_NODE_GPU=false nodemon --watch src --watch runner-cli --ext 'ts,json' -x 'npm run test-silent --onlyChanged'",
     "prepare": "husky && husky install",
     "lint": "eslint . --fix --max-warnings=0",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
