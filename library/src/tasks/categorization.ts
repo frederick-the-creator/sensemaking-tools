@@ -67,9 +67,9 @@ export async function categorizeWithRetry(
     }
 
     if (attempts < MAX_RETRIES) {
-      console.warn(
-        `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
-      );
+      // console.warn(
+      //   `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
+      // );
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
     }
   }
@@ -182,7 +182,7 @@ function isExtraComment(comment: Comment | CommentRecord, inputCommentIds: Set<s
  */
 function hasEmptyTopicsOrSubtopics(comment: CommentRecord): boolean {
   if (comment.topics.length === 0) {
-    console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
+    // console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
     return true;
   }
   if (
@@ -190,7 +190,7 @@ function hasEmptyTopicsOrSubtopics(comment: CommentRecord): boolean {
       (topic: Topic) => "subtopics" in topic && (!topic.subtopics || topic.subtopics.length === 0)
     )
   ) {
-    console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
+    // console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
@@ -264,7 +264,7 @@ export function findMissingComments(
   );
 
   if (missingComments.length > 0) {
-    console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
+    // console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
   }
   return missingComments;
 }
@@ -561,7 +561,7 @@ export async function categorizeCommentsRecursive(
   prompt_learn_metrics?: string
 ): Promise<Comment[]> {
   const currentTopicDepth = getTopicDepth(comments);
-  console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
+  // console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
   if (currentTopicDepth >= topicDepth) {
     return comments;
   }
@@ -673,9 +673,9 @@ export async function oneLevelCategorization(
 
   // categorize comment batches, potentially in parallel
   const totalBatches = Math.ceil(comments.length / model.categorizationBatchSize);
-  console.log(
-    `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
-  );
+  // console.log(
+  //   `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
+  // );
   const CategorizedBatches: CommentRecord[][] = await executeConcurrently(batchesToCategorize);
 
   // flatten categorized batches

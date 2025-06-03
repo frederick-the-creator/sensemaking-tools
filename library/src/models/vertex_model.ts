@@ -54,7 +54,7 @@ export class VertexModel extends Model {
     });
     this.modelName = modelName;
 
-    console.log("Creating VertexModel with ", DEFAULT_VERTEX_PARALLELISM, " parallel workers...");
+    // console.log("Creating VertexModel with ", DEFAULT_VERTEX_PARALLELISM, " parallel workers...");
     this.limit = pLimit(DEFAULT_VERTEX_PARALLELISM);
   }
 
@@ -146,9 +146,9 @@ export class VertexModel extends Model {
             if (!validator(responseText)) {
               return false;
             }
-            console.log(
-              `✓ Completed LLM call (input: ${response.usageMetadata?.promptTokenCount} tokens, output: ${response.usageMetadata?.candidatesTokenCount} tokens)`
-            );
+            // console.log(
+            //   `✓ Completed LLM call (input: ${response.usageMetadata?.promptTokenCount} tokens, output: ${response.usageMetadata?.candidatesTokenCount} tokens)`
+            // );
             return true;
           },
           MAX_LLM_RETRIES,

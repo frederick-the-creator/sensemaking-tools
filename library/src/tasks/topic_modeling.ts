@@ -192,7 +192,7 @@ export function learnOneLevelOfTopics(
 
   return retryCall(
     async function (model: Model): Promise<Topic[]> {
-      console.log(`Identifying topics for ${comments.length} statements`);
+      // console.log(`Identifying topics for ${comments.length} statements`);
       const finalPrompt = getPrompt(
         instructions,
         comments.map((comment) => comment.text),

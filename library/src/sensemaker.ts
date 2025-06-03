@@ -183,7 +183,7 @@ export class Sensemaker {
       prompt_learn_metrics
     );
 
-    console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);
+    // console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);
     return categorizedComments;
   }
 }

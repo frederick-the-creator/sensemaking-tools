@@ -93,9 +93,9 @@ class VertexModel:
                 logging.error(f"Model returned an incomplete response: {response}")
                 return False
 
-            logging.info(
-                f"✓ Completed LLM call (input: {response.usage_metadata.prompt_token_count} tokens, output: {response.usage_metadata.candidates_token_count} tokens)"
-            )
+            # logging.info(
+            #     f"✓ Completed LLM call (input: {response.usage_metadata.prompt_token_count} tokens, output: {response.usage_metadata.candidates_token_count} tokens)"
+            # )
             return True
 
         result = await retry_call(

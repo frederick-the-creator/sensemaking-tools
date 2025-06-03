@@ -221,7 +221,7 @@ function learnOneLevelOfTopics(
   return (0, sensemaker_utils_1.retryCall)(
     function (model) {
       return __awaiter(this, void 0, void 0, function* () {
-        console.log(`Identifying topics for ${comments.length} statements`);
+        // console.log(`Identifying topics for ${comments.length} statements`);
         const finalPrompt = (0, sensemaker_utils_1.getPrompt)(
           instructions,
           comments.map((comment) => comment.text),

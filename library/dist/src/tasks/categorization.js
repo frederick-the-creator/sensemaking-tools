@@ -98,9 +98,9 @@ function categorizeWithRetry(model, instructions, inputComments, topics, additio
         break; // All comments categorized successfully
       }
       if (attempts < model_util_1.MAX_RETRIES) {
-        console.warn(
-          `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${model_util_1.RETRY_DELAY_MS / 1000} seconds...`
-        );
+        // console.warn(
+        //   `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${model_util_1.RETRY_DELAY_MS / 1000} seconds...`
+        // );
         yield new Promise((resolve) => setTimeout(resolve, model_util_1.RETRY_DELAY_MS));
       }
     }
@@ -193,7 +193,7 @@ function isExtraComment(comment, inputCommentIds) {
  */
 function hasEmptyTopicsOrSubtopics(comment) {
   if (comment.topics.length === 0) {
-    console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
+    // console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
     return true;
   }
   if (
@@ -201,7 +201,7 @@ function hasEmptyTopicsOrSubtopics(comment) {
       (topic) => "subtopics" in topic && (!topic.subtopics || topic.subtopics.length === 0)
     )
   ) {
-    console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
+    // console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
@@ -260,7 +260,7 @@ function findMissingComments(commentRecords, uncategorized) {
     (uncommentRecord) => !commentRecordIds.includes(uncommentRecord.id)
   );
   if (missingComments.length > 0) {
-    console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
+    // console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
   }
   return missingComments;
 }
@@ -530,7 +530,7 @@ function categorizeCommentsRecursive(
 ) {
   return __awaiter(this, void 0, void 0, function* () {
     const currentTopicDepth = getTopicDepth(comments);
-    console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
+    // console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
     if (currentTopicDepth >= topicDepth) {
       return comments;
     }
@@ -641,9 +641,9 @@ function oneLevelCategorization(
     }
     // categorize comment batches, potentially in parallel
     const totalBatches = Math.ceil(comments.length / model.categorizationBatchSize);
-    console.log(
-      `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
-    );
+    // console.log(
+    //   `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
+    // );
     const CategorizedBatches = yield (0, sensemaker_utils_1.executeConcurrently)(
       batchesToCategorize
     );
