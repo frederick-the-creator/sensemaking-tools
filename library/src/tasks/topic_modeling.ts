@@ -38,22 +38,16 @@ export function learnOneLevelOfTopicsPrompt(
   prompt_learn_metrics?: string
 ): string {
   const otherTopicNames = otherTopics?.map((topic) => topic.name).join(", ") ?? "";
-  console.log("Running Special Factor Prompt");
 
   if (prompt_learn_factor) {
-    console.log("Running Special Factor Generation Prompt - Prompt_learn_factor");
     prompt_learn_factor = prompt_learn_factor
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    console.log("prompt_learn_factor", prompt_learn_factor);
     return prompt_learn_factor;
   } else if (prompt_learn_metrics) {
-    console.log("Running Special Metric Generation Prompt - Prompt_learn_metrics");
-    console.log("prompt_learn_metrics", prompt_learn_metrics);
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    console.log("prompt_learn_metrics", prompt_learn_metrics);
     return prompt_learn_metrics;
   } else {
     return "No prompt provided";
@@ -204,12 +198,7 @@ export function learnOneLevelOfTopics(
         comments.map((comment) => comment.text),
         additionalContext
       );
-      console.log("Final prompt sent to LLM:", finalPrompt);
       const llmOutput = await model.generateData(finalPrompt, schema);
-      console.log(
-        "LLM output (topics/metrics/factors) returned:",
-        JSON.stringify(llmOutput, null, 2)
-      );
       return llmOutput as Topic[];
     },
     function (response: Topic[]): boolean {
