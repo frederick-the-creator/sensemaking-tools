@@ -109,12 +109,10 @@ function categorizeWithRetry(model, instructions, inputComments, topics, additio
 }
 function topicCategorizationPrompt(topics, prompt_categorise_comments) {
   if (prompt_categorise_comments) {
-    console.log("Running Special Comment Categorization Prompt - Prompt_categorise_comments");
     prompt_categorise_comments = prompt_categorise_comments.replace(
       /{{topics}}/g,
       JSON.stringify(topics)
     );
-    console.log("prompt_categorise_comments", prompt_categorise_comments);
     return prompt_categorise_comments;
   } else {
     return "No prompt provided";
@@ -536,9 +534,7 @@ function categorizeCommentsRecursive(
     if (currentTopicDepth >= topicDepth) {
       return comments;
     }
-    console.log("categorizeCommentsRecursive Triggered");
     if (!topics) {
-      console.log("Absent Topics Branch Triggered");
       topics = yield (0, topic_modeling_1.learnOneLevelOfTopics)(
         comments,
         model,
@@ -550,11 +546,9 @@ function categorizeCommentsRecursive(
         prompt_learn_factor,
         prompt_learn_metrics
       );
-      console.log("Topics returned from learnOneLevelOfTopics:", JSON.stringify(topics, null, 2));
       const allSubtopics = topics.flatMap((t) =>
         "subtopics" in t && t.subtopics ? t.subtopics : []
       );
-      console.log("allSubtopics:", JSON.stringify(allSubtopics, null, 2));
       comments = yield oneLevelCategorization(
         comments,
         model,
@@ -564,12 +558,10 @@ function categorizeCommentsRecursive(
       );
       // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
       // This needs included in the list of topics so these are processed downstream.
-      console.log("comments after oneLevelCategorization:", JSON.stringify(comments, null, 2));
       topics.push({ name: "Other" });
       return categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext);
     }
     if (topics && currentTopicDepth === 0) {
-      console.log("Present Topics Branch Triggered");
       comments = yield oneLevelCategorization(
         comments,
         model,
@@ -577,7 +569,6 @@ function categorizeCommentsRecursive(
         additionalContext,
         prompt_categorise_comments
       );
-      console.log("comments after oneLevelCategorization:", JSON.stringify(comments, null, 2));
       // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
       // This needs included in the list of topics so these are processed downstream.
       topics.push({ name: "Other" });

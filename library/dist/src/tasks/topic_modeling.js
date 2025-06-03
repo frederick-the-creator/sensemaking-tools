@@ -78,21 +78,15 @@ function learnOneLevelOfTopicsPrompt(
         : otherTopics.map((topic) => topic.name).join(", ")) !== null && _a !== void 0
       ? _a
       : "";
-  console.log("Running Special Factor Prompt");
   if (prompt_learn_factor) {
-    console.log("Running Special Factor Generation Prompt - Prompt_learn_factor");
     prompt_learn_factor = prompt_learn_factor
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    console.log("prompt_learn_factor", prompt_learn_factor);
     return prompt_learn_factor;
   } else if (prompt_learn_metrics) {
-    console.log("Running Special Metric Generation Prompt - Prompt_learn_metrics");
-    console.log("prompt_learn_metrics", prompt_learn_metrics);
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    console.log("prompt_learn_metrics", prompt_learn_metrics);
     return prompt_learn_metrics;
   } else {
     return "No prompt provided";
@@ -233,12 +227,7 @@ function learnOneLevelOfTopics(
           comments.map((comment) => comment.text),
           additionalContext
         );
-        console.log("Final prompt sent to LLM:", finalPrompt);
         const llmOutput = yield model.generateData(finalPrompt, schema);
-        console.log(
-          "LLM output (topics/metrics/factors) returned:",
-          JSON.stringify(llmOutput, null, 2)
-        );
         return llmOutput;
       });
     },
