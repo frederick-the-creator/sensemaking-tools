@@ -13,11 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DEFAULT_VERTEX_PARALLELISM =
-  exports.RETRY_DELAY_MS =
-  exports.MAX_LLM_RETRIES =
-  exports.MAX_RETRIES =
-    void 0;
+exports.DEFAULT_VERTEX_PARALLELISM = exports.RETRY_DELAY_MS = exports.MAX_LLM_RETRIES = exports.MAX_RETRIES = void 0;
 // Util class for models
 // The maximum number of times a task should be retried.
 exports.MAX_RETRIES = 3;

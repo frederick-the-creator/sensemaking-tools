@@ -15,13 +15,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const topic_modeling_1 = require("./topic_modeling");
 describe("learnedTopicsValid", () => {
-  it('should allow "Other" subtopic to have the same name as "Other" topic', () => {
-    const topics = [
-      {
-        name: "Other",
-        subtopics: [{ name: "Other" }],
-      },
-    ];
-    expect((0, topic_modeling_1.learnedTopicsValid)(topics)).toBe(true);
-  });
+    it('should allow "Other" subtopic to have the same name as "Other" topic', () => {
+        const topics = [
+            {
+                name: "Other",
+                subtopics: [{ name: "Other" }],
+            },
+        ];
+        expect((0, topic_modeling_1.learnedTopicsValid)(topics)).toBe(true);
+    });
 });

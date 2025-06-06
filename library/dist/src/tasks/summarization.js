@@ -12,37 +12,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-var __awaiter =
-  (this && this.__awaiter) ||
-  function (thisArg, _arguments, P, generator) {
-    function adopt(value) {
-      return value instanceof P
-        ? value
-        : new P(function (resolve) {
-            resolve(value);
-          });
-    }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
-      function fulfilled(value) {
-        try {
-          step(generator.next(value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function rejected(value) {
-        try {
-          step(generator["throw"](value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-      }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MultiStepSummary = void 0;
 exports.summarizeByType = summarizeByType;
@@ -66,69 +44,43 @@ const topics_1 = require("./summarization_subtasks/topics");
  * @throws {TypeError} If an unknown `summarizationType` is provided.
  */
 function summarizeByType(model, comments, summarizationType, additionalContext) {
-  return __awaiter(this, void 0, void 0, function* () {
-    let summaryStats;
-    if (summarizationType === types_1.SummarizationType.GROUP_INFORMED_CONSENSUS) {
-      summaryStats = new group_informed_1.GroupedSummaryStats(comments);
-    } else if (summarizationType === types_1.SummarizationType.AGGREGATE_VOTE) {
-      summaryStats = new majority_vote_1.MajoritySummaryStats(comments);
-    } else {
-      throw new TypeError("Unknown Summarization Type.");
-    }
-    return new MultiStepSummary(summaryStats, model, additionalContext).getSummary();
-  });
+    return __awaiter(this, void 0, void 0, function* () {
+        let summaryStats;
+        if (summarizationType === types_1.SummarizationType.GROUP_INFORMED_CONSENSUS) {
+            summaryStats = new group_informed_1.GroupedSummaryStats(comments);
+        }
+        else if (summarizationType === types_1.SummarizationType.AGGREGATE_VOTE) {
+            summaryStats = new majority_vote_1.MajoritySummaryStats(comments);
+        }
+        else {
+            throw new TypeError("Unknown Summarization Type.");
+        }
+        return new MultiStepSummary(summaryStats, model, additionalContext).getSummary();
+    });
 }
 /**
  *
  */
 class MultiStepSummary {
-  constructor(summaryStats, model, additionalContext) {
-    this.summaryStats = summaryStats;
-    this.model = model;
-    this.additionalContext = additionalContext;
-  }
-  getSummary() {
-    return __awaiter(this, void 0, void 0, function* () {
-      const topicsSummary = yield new topics_1.AllTopicsSummary(
-        this.summaryStats,
-        this.model,
-        this.additionalContext
-      ).getSummary();
-      const summarySections = [];
-      summarySections.push(
-        yield new intro_1.IntroSummary(
-          this.summaryStats,
-          this.model,
-          this.additionalContext
-        ).getSummary()
-      );
-      summarySections.push(
-        yield new overview_1.OverviewSummary(
-          { summaryStats: this.summaryStats, topicsSummary: topicsSummary, method: "one-shot" },
-          this.model,
-          this.additionalContext
-        ).getSummary()
-      );
-      summarySections.push(
-        yield new top_subtopics_1.TopSubtopicsSummary(
-          this.summaryStats,
-          this.model,
-          this.additionalContext
-        ).getSummary()
-      );
-      if (this.summaryStats.groupBasedSummarization) {
-        summarySections.push(
-          yield new groups_1.GroupsSummary(
-            this.summaryStats,
-            this.model,
-            this.additionalContext
-          ).getSummary()
-        );
-      }
-      summarySections.push(topicsSummary);
-      return new types_1.Summary(summarySections, this.summaryStats.comments);
-    });
-  }
+    constructor(summaryStats, model, additionalContext) {
+        this.summaryStats = summaryStats;
+        this.model = model;
+        this.additionalContext = additionalContext;
+    }
+    getSummary() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const topicsSummary = yield new topics_1.AllTopicsSummary(this.summaryStats, this.model, this.additionalContext).getSummary();
+            const summarySections = [];
+            summarySections.push(yield new intro_1.IntroSummary(this.summaryStats, this.model, this.additionalContext).getSummary());
+            summarySections.push(yield new overview_1.OverviewSummary({ summaryStats: this.summaryStats, topicsSummary: topicsSummary, method: "one-shot" }, this.model, this.additionalContext).getSummary());
+            summarySections.push(yield new top_subtopics_1.TopSubtopicsSummary(this.summaryStats, this.model, this.additionalContext).getSummary());
+            if (this.summaryStats.groupBasedSummarization) {
+                summarySections.push(yield new groups_1.GroupsSummary(this.summaryStats, this.model, this.additionalContext).getSummary());
+            }
+            summarySections.push(topicsSummary);
+            return new types_1.Summary(summarySections, this.summaryStats.comments);
+        });
+    }
 }
 exports.MultiStepSummary = MultiStepSummary;
 /**
@@ -159,14 +111,12 @@ exports.MultiStepSummary = MultiStepSummary;
  * }
  */
 function _quantifyTopicNames(topics) {
-  const result = {};
-  for (const topic of topics) {
-    const topicName = `${topic.name} (${topic.commentCount} comments)`;
-    if (topic.subtopicStats) {
-      result[topicName] = topic.subtopicStats.map(
-        (subtopic) => `${subtopic.name} (${subtopic.commentCount} comments)`
-      );
+    const result = {};
+    for (const topic of topics) {
+        const topicName = `${topic.name} (${topic.commentCount} comments)`;
+        if (topic.subtopicStats) {
+            result[topicName] = topic.subtopicStats.map((subtopic) => `${subtopic.name} (${subtopic.commentCount} comments)`);
+        }
     }
-  }
-  return result;
+    return result;
 }

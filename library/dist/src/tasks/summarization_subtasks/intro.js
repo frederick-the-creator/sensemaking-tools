@@ -16,23 +16,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntroSummary = void 0;
 const recursive_summarization_1 = require("./recursive_summarization");
 class IntroSummary extends recursive_summarization_1.RecursiveSummary {
-  getSummary() {
-    let text = `This report summarizes the results of public input, encompassing:\n`;
-    const commentCountFormatted = this.input.commentCount.toLocaleString();
-    text += ` * __${commentCountFormatted} statements__\n`;
-    const voteCountFormatted = this.input.voteCount.toLocaleString();
-    text += ` * __${voteCountFormatted} votes__\n`;
-    const statsByTopic = this.input.getStatsByTopic();
-    text += ` * ${statsByTopic.length} topics\n`;
-    const subtopicCount = statsByTopic
-      .map((topic) => {
-        return topic.subtopicStats ? topic.subtopicStats.length : 0;
-      })
-      .reduce((a, b) => a + b, 0);
-    text += ` * ${subtopicCount} subtopics\n\n`;
-    // TODO: Add how many themes there are when it's available.
-    text += "All voters were anonymous.";
-    return Promise.resolve({ title: "## Introduction", text: text });
-  }
+    getSummary() {
+        let text = `This report summarizes the results of public input, encompassing:\n`;
+        const commentCountFormatted = this.input.commentCount.toLocaleString();
+        text += ` * __${commentCountFormatted} statements__\n`;
+        const voteCountFormatted = this.input.voteCount.toLocaleString();
+        text += ` * __${voteCountFormatted} votes__\n`;
+        const statsByTopic = this.input.getStatsByTopic();
+        text += ` * ${statsByTopic.length} topics\n`;
+        const subtopicCount = statsByTopic
+            .map((topic) => {
+            return topic.subtopicStats ? topic.subtopicStats.length : 0;
+        })
+            .reduce((a, b) => a + b, 0);
+        text += ` * ${subtopicCount} subtopics\n\n`;
+        // TODO: Add how many themes there are when it's available.
+        text += "All voters were anonymous.";
+        return Promise.resolve({ title: "## Introduction", text: text });
+    }
 }
 exports.IntroSummary = IntroSummary;

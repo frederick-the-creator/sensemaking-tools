@@ -15,10 +15,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecursiveSummary = void 0;
 class RecursiveSummary {
-  constructor(input, model, additionalContext) {
-    this.input = input;
-    this.model = model;
-    this.additionalContext = additionalContext;
-  }
+    constructor(input, model, additionalContext) {
+        this.input = input;
+        this.model = model;
+        this.additionalContext = additionalContext;
+    }
 }
 exports.RecursiveSummary = RecursiveSummary;

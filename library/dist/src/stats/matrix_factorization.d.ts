@@ -1,7 +1,7 @@
 export interface Rating {
-  userId: number;
-  noteId: number;
-  rating: number;
+    userId: number;
+    noteId: number;
+    rating: number;
 }
 /**
  * Given ratings, return helpfulness scores and other model parameters for the given set of ratings.
@@ -13,11 +13,4 @@ export interface Rating {
  * @param lambdaF Factor term regularization parameter
  * @returns Helpfulness scores
  */
-export declare function communityNotesMatrixFactorization(
-  ratings: Rating[],
-  numFactors?: number,
-  epochs?: number,
-  learningRate?: number | number[],
-  lambdaI?: number,
-  lambdaF?: number
-): Promise<number[]>;
+export declare function communityNotesMatrixFactorization(ratings: Rating[], numFactors?: number, epochs?: number, learningRate?: number | number[], lambdaI?: number, lambdaF?: number): Promise<number[]>;

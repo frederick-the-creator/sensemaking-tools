@@ -15,19 +15,19 @@
 // Setup to run tests quietly, suppressing all logs, warnings, and errors for passing tests.
 // When a test fails, Jest will still report the failure details.
 if (typeof global.structuredClone !== "function") {
-  global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
+    global.structuredClone = (obj) => JSON.parse(JSON.stringify(obj));
 }
 const originalConsole = Object.assign({}, console);
 beforeAll(() => {
-  jest.spyOn(console, "log").mockImplementation(() => {});
-  jest.spyOn(console, "warn").mockImplementation(() => {});
-  jest.spyOn(console, "error").mockImplementation(() => {});
+    jest.spyOn(console, "log").mockImplementation(() => { });
+    jest.spyOn(console, "warn").mockImplementation(() => { });
+    jest.spyOn(console, "error").mockImplementation(() => { });
 });
 afterAll(() => {
-  console.log = originalConsole.log;
-  console.warn = originalConsole.warn;
-  console.error = originalConsole.error;
+    console.log = originalConsole.log;
+    console.warn = originalConsole.warn;
+    console.error = originalConsole.error;
 });
 afterEach(() => {
-  jest.clearAllMocks();
+    jest.clearAllMocks();
 });

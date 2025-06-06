@@ -10,15 +10,7 @@ import { Comment, CommentRecord, SummaryContent, Topic } from "./types";
  * @param isValidArgs the args for isValid
  * @returns the valid response from func
  */
-export declare function retryCall<T>(
-  func: (...args: any[]) => Promise<T>,
-  isValid: (response: T, ...args: any[]) => boolean,
-  maxRetries: number,
-  errorMsg: string,
-  retryDelayMS: number | undefined,
-  funcArgs: any[],
-  isValidArgs: any[]
-): Promise<T>;
+export declare function retryCall<T>(func: (...args: any[]) => Promise<T>, isValid: (response: T, ...args: any[]) => boolean, maxRetries: number, errorMsg: string, retryDelayMS: number | undefined, funcArgs: any[], isValidArgs: any[]): Promise<T>;
 /**
  * Combines the data and instructions into a prompt to send to Vertex.
  * @param instructions: what the model should do.
@@ -27,12 +19,7 @@ export declare function retryCall<T>(
  * @param dataWrapper: a function for wrapping each data entry
  * @returns the instructions and the data as a text
  */
-export declare function getAbstractPrompt<T>(
-  instructions: string,
-  data: T[],
-  dataWrapper: (data: T) => string,
-  additionalContext?: string
-): string;
+export declare function getAbstractPrompt<T>(instructions: string, data: T[], dataWrapper: (data: T) => string, additionalContext?: string): string;
 /**
  * Combines the data and instructions into a prompt to send to Vertex.
  * @param instructions: what the model should do.
@@ -40,11 +27,7 @@ export declare function getAbstractPrompt<T>(
  * @param additionalContext additional context to include in the prompt.
  * @returns the instructions and the data as a text
  */
-export declare function getPrompt(
-  instructions: string,
-  data: string[],
-  additionalContext?: string
-): string;
+export declare function getPrompt(instructions: string, data: string[], additionalContext?: string): string;
 /**
  * Utility function for formatting the comments together with vote tally data
  * @param commentData: the data to summarize, as an array of Comment objects
@@ -57,10 +40,7 @@ export declare function formatCommentsWithVotes(commentData: Comment[]): string[
  * @param missingTexts the original comments with IDs match the commentRecords
  * @returns a list of Comments with all possible fields from commentRecords.
  */
-export declare function hydrateCommentRecord(
-  commentRecords: CommentRecord[],
-  missingTexts: Comment[]
-): Comment[];
+export declare function hydrateCommentRecord(commentRecords: CommentRecord[], missingTexts: Comment[]): Comment[];
 /**
  * Groups categorized comments by topic and subtopic.
  *
@@ -80,11 +60,11 @@ export declare function hydrateCommentRecord(
  * TODO: create a similar function to group comments by topics only.
  */
 export declare function groupCommentsBySubtopic(categorized: Comment[]): {
-  [topicName: string]: {
-    [subtopicName: string]: {
-      [commentId: string]: Comment;
+    [topicName: string]: {
+        [subtopicName: string]: {
+            [commentId: string]: Comment;
+        };
     };
-  };
 };
 /**
  * Gets a set of unique topics and subtopics from a list of comments.
@@ -104,8 +84,8 @@ export declare function decimalToPercent(decimal: number, precision?: number): s
  * getValue function.
  */
 export interface ColumnDefinition {
-  columnName: string;
-  getValue: (comment: Comment) => any;
+    columnName: string;
+    getValue: (comment: Comment) => any;
 }
 /**
  * Returns a markdown table of comment data for inspection and debugging.
@@ -113,10 +93,7 @@ export interface ColumnDefinition {
  * @param extraColumns An array of keys of the comment objects to add as table cells.
  * @returns A string containing the markdown table.
  */
-export declare function commentTableMarkdown(
-  comments: Comment[],
-  extraColumns?: (keyof Comment | ColumnDefinition)[]
-): string;
+export declare function commentTableMarkdown(comments: Comment[], extraColumns?: (keyof Comment | ColumnDefinition)[]): string;
 /**
  * Executes a batch of asynchronous functions (callbacks) concurrently.
  * This is essential for running multiple LLM calls in parallel, as it submits requests downstream as a batch.
@@ -132,7 +109,4 @@ export declare function executeConcurrently<T>(callbacks: (() => Promise<T>)[]):
  * @param summaryContent Input summary content
  * @returns the resulting summary conten, as a new data structure
  */
-export declare function filterSummaryContent(
-  summaryContent: SummaryContent,
-  filterFn: (s: SummaryContent) => boolean
-): SummaryContent;
+export declare function filterSummaryContent(summaryContent: SummaryContent, filterFn: (s: SummaryContent) => boolean): SummaryContent;

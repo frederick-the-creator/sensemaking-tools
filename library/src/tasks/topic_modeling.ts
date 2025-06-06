@@ -34,21 +34,25 @@ After determining the optimal number of topics, identify those topics.
 export function learnOneLevelOfTopicsPrompt(
   parentTopic: Topic,
   otherTopics?: Topic[],
-  prompt_learn_factor?: string,
-  prompt_learn_metrics?: string
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string,
+  prompt_learn_themes?: string
 ): string {
   const otherTopicNames = otherTopics?.map((topic) => topic.name).join(", ") ?? "";
 
-  if (prompt_learn_factor) {
-    prompt_learn_factor = prompt_learn_factor
+  if (prompt_learn_factors) {
+    prompt_learn_factors = prompt_learn_factors
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    return prompt_learn_factor;
+    return prompt_learn_factors;
   } else if (prompt_learn_metrics) {
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
     return prompt_learn_metrics;
+  } else if (prompt_learn_themes) {
+    prompt_learn_themes = prompt_learn_themes;
+    return prompt_learn_themes;
   } else {
     return "No prompt provided";
   }
@@ -145,13 +149,16 @@ export function generateTopicModelingPrompt(
   otherTopics?: Topic[],
   theme?: string,
   factor?: string,
-  prompt_learn_factor?: string,
-  prompt_learn_metrics?: string
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string,
+  prompt_learn_themes?: string
 ): string {
   if (theme) {
-    return learnOneLevelOfTopicsPrompt({ name: theme }, otherTopics, prompt_learn_factor);
+    return learnOneLevelOfTopicsPrompt({ name: theme }, otherTopics, prompt_learn_factors);
   } else if (factor) {
     return learnOneLevelOfTopicsPrompt({ name: factor }, otherTopics, prompt_learn_metrics);
+  } else if (prompt_learn_themes) {
+    return learnOneLevelOfTopicsPrompt({ name: "NA" }, otherTopics, prompt_learn_themes);
   } else {
     return LEARN_TOPICS_PROMPT;
   }
@@ -177,28 +184,31 @@ export function learnOneLevelOfTopics(
   additionalContext?: string,
   theme?: string,
   factor?: string,
-  prompt_learn_factor?: string,
-  prompt_learn_metrics?: string
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string,
+  prompt_learn_themes?: string
 ): Promise<Topic[]> {
   const instructions = generateTopicModelingPrompt(
     topic,
     otherTopics,
     theme,
     factor,
-    prompt_learn_factor,
-    prompt_learn_metrics
+    prompt_learn_factors,
+    prompt_learn_metrics,
+    prompt_learn_themes
   );
   const schema = theme || factor ? Type.Array(NestedTopic) : Type.Array(FlatTopic);
 
   return retryCall(
     async function (model: Model): Promise<Topic[]> {
-      // console.log(`Identifying topics for ${comments.length} statements`);
+      console.log(`Identifying topics for ${comments.length} statements`);
       const finalPrompt = getPrompt(
         instructions,
         comments.map((comment) => comment.text),
         additionalContext
       );
       const llmOutput = await model.generateData(finalPrompt, schema);
+      console.log("LLM Output:", llmOutput);
       return llmOutput as Topic[];
     },
     function (response: Topic[]): boolean {

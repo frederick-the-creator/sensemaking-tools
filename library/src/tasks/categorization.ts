@@ -557,8 +557,9 @@ export async function categorizeCommentsRecursive(
   theme?: string,
   factor?: string,
   prompt_categorise_comments?: string,
-  prompt_learn_factor?: string,
-  prompt_learn_metrics?: string
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string,
+  prompt_learn_themes?: string
 ): Promise<Comment[]> {
   const currentTopicDepth = getTopicDepth(comments);
   // console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
@@ -566,6 +567,9 @@ export async function categorizeCommentsRecursive(
     return comments;
   }
   if (!topics) {
+    // Case where no topics are provided (used for Factor and Metric Analysis, and Thematic Analysis when theme learning is required)
+    // If block does both topic learning and categorisation. 
+    console.log("Learn topics branch triggered")
     topics = await learnOneLevelOfTopics(
       comments,
       model,
@@ -574,16 +578,27 @@ export async function categorizeCommentsRecursive(
       additionalContext,
       theme,
       factor,
-      prompt_learn_factor,
-      prompt_learn_metrics
+      prompt_learn_factors,
+      prompt_learn_metrics,
+      prompt_learn_themes
     );
-    const allSubtopics = topics.flatMap((t) =>
-      "subtopics" in t && t.subtopics ? t.subtopics : []
-    );
+
+
+    let topicsCategorise = [];
+    if (prompt_learn_themes) {
+      topicsCategorise = topics.map((t) => ({ name: t.name }));
+    } else {
+      topicsCategorise = topics.flatMap((t) =>
+        "subtopics" in t && t.subtopics ? t.subtopics : []
+      );
+    }
+
+    console.log("topics", topics);
+    console.log("topicsCategorise", topicsCategorise);
     comments = await oneLevelCategorization(
       comments,
       model,
-      allSubtopics,
+      topicsCategorise,
       additionalContext,
       prompt_categorise_comments
     );
@@ -595,6 +610,8 @@ export async function categorizeCommentsRecursive(
   }
 
   if (topics && currentTopicDepth === 0) {
+    // Cases where topics ARE provided (used for Thematic Analysis)
+    // If block does categorisation only. 
     comments = await oneLevelCategorization(
       comments,
       model,

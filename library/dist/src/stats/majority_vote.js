@@ -19,224 +19,152 @@ const stats_util_1 = require("./stats_util");
 const summary_stats_1 = require("./summary_stats");
 // Stats basis for the summary that is based on majority vote algorithms. Does not use groups.
 class MajoritySummaryStats extends summary_stats_1.SummaryStats {
-  constructor() {
-    super(...arguments);
-    // Must be above this threshold to be considered high agreement.
-    this.minCommonGroundProb = 0.7;
-    // Agreement and Disagreement must be between these values to be difference of opinion.
-    this.minDifferenceProb = 0.4;
-    this.maxDifferenceProb = 0.6;
-    // Whether to include pass votes in agree and disagree rate calculations.
-    this.includePasses = false;
-    this.groupBasedSummarization = false;
-    // This outlier protection isn't needed since we already filter our comments without many votes.
-    this.asProbabilityEstimate = false;
-    // Buffer between uncertainty comments and high/low alignment comments.
-    this.uncertaintyBuffer = 0.05;
-  }
-  /**
-   * An override of the SummaryStats static factory method,
-   * to allow for MajoritySummaryStats specific initialization.
-   */
-  static create(comments) {
-    return new MajoritySummaryStats(comments);
-  }
-  /**
-   * Returns the top k comments according to the given metric.
-   */
-  topK(sortBy, k = this.maxSampleSize, filterFn = () => true) {
-    return this.filteredComments
-      .filter(filterFn)
-      .sort((a, b) => sortBy(b) - sortBy(a))
-      .slice(0, k);
-  }
-  /** Returns a score indicating how well a comment represents when everyone agrees. */
-  getCommonGroundAgreeScore(comment) {
-    return (0, stats_util_1.getTotalAgreeRate)(
-      comment.voteInfo,
-      this.includePasses,
-      this.asProbabilityEstimate
-    );
-  }
-  /** Returns a score indicating how well a comment represents the common ground. */
-  getCommonGroundScore(comment) {
-    return Math.max(
-      this.getCommonGroundAgreeScore(comment),
-      (0, stats_util_1.getTotalDisagreeRate)(
-        comment.voteInfo,
-        this.includePasses,
-        this.asProbabilityEstimate
-      )
-    );
-  }
-  meetsCommonGroundAgreeThreshold(comment) {
-    return (
-      (0, stats_util_1.getTotalAgreeRate)(
-        comment.voteInfo,
-        this.includePasses,
-        this.asProbabilityEstimate
-      ) >= this.minCommonGroundProb &&
-      (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) <=
-        this.minUncertaintyProb - this.uncertaintyBuffer
-    );
-  }
-  /**
-   * Gets the topK agreed upon comments based on highest % of agree votes.
-   *
-   * @param k the number of comments to get
-   * @returns the top agreed on comments
-   */
-  getCommonGroundAgreeComments(k = this.maxSampleSize) {
-    return this.topK(
-      (comment) => this.getCommonGroundAgreeScore(comment),
-      k,
-      // Before getting the top agreed comments, enforce a minimum level of agreement
-      (comment) => this.meetsCommonGroundAgreeThreshold(comment)
-    );
-  }
-  /**
-   * Gets the topK common ground comments where either everyone agrees or everyone disagrees.
-   *
-   * @param k the number of comments to get
-   * @returns the top common ground comments
-   */
-  getCommonGroundComments(k = this.maxSampleSize) {
-    return this.topK(
-      (comment) => this.getCommonGroundScore(comment),
-      k,
-      // Before getting the top agreed comments, enforce a minimum level of agreement
-      (comment) =>
-        this.meetsCommonGroundAgreeThreshold(comment) ||
-        this.meetsCommonGroundDisagreeThreshold(comment)
-    );
-  }
-  getCommonGroundNoCommentsMessage() {
-    return (
-      `No statements met the thresholds necessary to be considered as a point of common ` +
-      `ground (at least ${this.minVoteCount} votes, and at least ` +
-      `${(0, sensemaker_utils_1.decimalToPercent)(this.minCommonGroundProb)} agreement).`
-    );
-  }
-  /** Returns a score indicating how well a comment represents an uncertain viewpoint based on pass
-   *  votes */
-  getUncertainScore(comment) {
-    return (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate);
-  }
-  /**
-   * Gets the topK uncertain comments based on pass votes.
-   *
-   * @param k the number of comments to get
-   * @returns the top uncertain comments
-   */
-  getUncertainComments(k = this.maxSampleSize) {
-    return this.topK(
-      (comment) => this.getUncertainScore(comment),
-      k,
-      // Before getting the top comments, enforce a minimum level of uncertainty
-      (comment) =>
-        (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) >=
-        this.minUncertaintyProb
-    );
-  }
-  meetsCommonGroundDisagreeThreshold(comment) {
-    return (
-      (0, stats_util_1.getTotalDisagreeRate)(
-        comment.voteInfo,
-        this.includePasses,
-        this.asProbabilityEstimate
-      ) >= this.minCommonGroundProb &&
-      (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) <=
-        this.minUncertaintyProb - this.uncertaintyBuffer
-    );
-  }
-  /**
-   * Gets the topK disagreed upon comments across.
-   *
-   * @param k dfaults to this.maxSampleSize
-   * @returns the top disagreed on comments
-   */
-  getCommonGroundDisagreeComments(k = this.maxSampleSize) {
-    return this.topK(
-      (comment) =>
-        (0, stats_util_1.getTotalDisagreeRate)(
-          comment.voteInfo,
-          this.includePasses,
-          this.asProbabilityEstimate
-        ),
-      k,
-      // Before using Group Informed Consensus a minimum bar of agreement between groups is enforced
-      (comment) => this.meetsCommonGroundDisagreeThreshold(comment)
-    );
-  }
-  /** Returns a score indicating how well a comment represents a difference of opinions. This
-   * score prioritizes comments where the agreement rate and disagreement rate are
-   * both high, and the pass rate is low.*/
-  getDifferenceOfOpinionScore(comment) {
-    return (
-      1 -
-      Math.abs(
-        (0, stats_util_1.getTotalAgreeRate)(
-          comment.voteInfo,
-          this.includePasses,
-          this.asProbabilityEstimate
-        ) -
-          (0, stats_util_1.getTotalDisagreeRate)(
-            comment.voteInfo,
-            this.includePasses,
-            this.asProbabilityEstimate
-          )
-      ) -
-      (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate)
-    );
-  }
-  /**
-   * Gets the topK agreed upon comments based on highest % of agree votes.
-   *
-   * @param k the number of comments to get
-   * @returns the top differences of opinion comments
-   */
-  getDifferenceOfOpinionComments(k = this.maxSampleSize) {
-    return this.topK(
-      // Rank comments with the same agree and disagree rates the most highly and prefer when these
-      // values are higher. So the best score would be when both the agree rate and the disagree
-      // rate are 0.5.
-      (comment) => this.getDifferenceOfOpinionScore(comment),
-      k,
-      // Before getting the top differences comments, enforce a minimum level of difference of
-      // opinion.
-      (comment) =>
-        (0, stats_util_1.getTotalAgreeRate)(
-          comment.voteInfo,
-          this.includePasses,
-          this.asProbabilityEstimate
-        ) >= this.minDifferenceProb &&
-        (0, stats_util_1.getTotalAgreeRate)(
-          comment.voteInfo,
-          this.includePasses,
-          this.asProbabilityEstimate
-        ) <= this.maxDifferenceProb &&
-        (0, stats_util_1.getTotalDisagreeRate)(
-          comment.voteInfo,
-          this.includePasses,
-          this.asProbabilityEstimate
-        ) >= this.minDifferenceProb &&
-        (0, stats_util_1.getTotalDisagreeRate)(
-          comment.voteInfo,
-          this.includePasses,
-          this.asProbabilityEstimate
-        ) <= this.maxDifferenceProb &&
-        (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) <=
-          this.minUncertaintyProb - this.uncertaintyBuffer
-    );
-  }
-  getDifferencesOfOpinionNoCommentsMessage() {
-    const minThreshold = (0, sensemaker_utils_1.decimalToPercent)(this.minDifferenceProb);
-    const maxThreshold = (0, sensemaker_utils_1.decimalToPercent)(this.maxDifferenceProb);
-    return (
-      `No statements met the thresholds necessary to be considered as a significant ` +
-      `difference of opinion (at least ${this.minVoteCount} votes, and both an agreement rate ` +
-      `and disagree rate between ${minThreshold}% and ${maxThreshold}%).`
-    );
-  }
+    constructor() {
+        super(...arguments);
+        // Must be above this threshold to be considered high agreement.
+        this.minCommonGroundProb = 0.7;
+        // Agreement and Disagreement must be between these values to be difference of opinion.
+        this.minDifferenceProb = 0.4;
+        this.maxDifferenceProb = 0.6;
+        // Whether to include pass votes in agree and disagree rate calculations.
+        this.includePasses = false;
+        this.groupBasedSummarization = false;
+        // This outlier protection isn't needed since we already filter our comments without many votes.
+        this.asProbabilityEstimate = false;
+        // Buffer between uncertainty comments and high/low alignment comments.
+        this.uncertaintyBuffer = 0.05;
+    }
+    /**
+     * An override of the SummaryStats static factory method,
+     * to allow for MajoritySummaryStats specific initialization.
+     */
+    static create(comments) {
+        return new MajoritySummaryStats(comments);
+    }
+    /**
+     * Returns the top k comments according to the given metric.
+     */
+    topK(sortBy, k = this.maxSampleSize, filterFn = () => true) {
+        return this.filteredComments
+            .filter(filterFn)
+            .sort((a, b) => sortBy(b) - sortBy(a))
+            .slice(0, k);
+    }
+    /** Returns a score indicating how well a comment represents when everyone agrees. */
+    getCommonGroundAgreeScore(comment) {
+        return (0, stats_util_1.getTotalAgreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate);
+    }
+    /** Returns a score indicating how well a comment represents the common ground. */
+    getCommonGroundScore(comment) {
+        return Math.max(this.getCommonGroundAgreeScore(comment), (0, stats_util_1.getTotalDisagreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate));
+    }
+    meetsCommonGroundAgreeThreshold(comment) {
+        return ((0, stats_util_1.getTotalAgreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate) >=
+            this.minCommonGroundProb &&
+            (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) <=
+                this.minUncertaintyProb - this.uncertaintyBuffer);
+    }
+    /**
+     * Gets the topK agreed upon comments based on highest % of agree votes.
+     *
+     * @param k the number of comments to get
+     * @returns the top agreed on comments
+     */
+    getCommonGroundAgreeComments(k = this.maxSampleSize) {
+        return this.topK((comment) => this.getCommonGroundAgreeScore(comment), k, 
+        // Before getting the top agreed comments, enforce a minimum level of agreement
+        (comment) => this.meetsCommonGroundAgreeThreshold(comment));
+    }
+    /**
+     * Gets the topK common ground comments where either everyone agrees or everyone disagrees.
+     *
+     * @param k the number of comments to get
+     * @returns the top common ground comments
+     */
+    getCommonGroundComments(k = this.maxSampleSize) {
+        return this.topK((comment) => this.getCommonGroundScore(comment), k, 
+        // Before getting the top agreed comments, enforce a minimum level of agreement
+        (comment) => this.meetsCommonGroundAgreeThreshold(comment) ||
+            this.meetsCommonGroundDisagreeThreshold(comment));
+    }
+    getCommonGroundNoCommentsMessage() {
+        return (`No statements met the thresholds necessary to be considered as a point of common ` +
+            `ground (at least ${this.minVoteCount} votes, and at least ` +
+            `${(0, sensemaker_utils_1.decimalToPercent)(this.minCommonGroundProb)} agreement).`);
+    }
+    /** Returns a score indicating how well a comment represents an uncertain viewpoint based on pass
+     *  votes */
+    getUncertainScore(comment) {
+        return (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate);
+    }
+    /**
+     * Gets the topK uncertain comments based on pass votes.
+     *
+     * @param k the number of comments to get
+     * @returns the top uncertain comments
+     */
+    getUncertainComments(k = this.maxSampleSize) {
+        return this.topK((comment) => this.getUncertainScore(comment), k, 
+        // Before getting the top comments, enforce a minimum level of uncertainty
+        (comment) => (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) >= this.minUncertaintyProb);
+    }
+    meetsCommonGroundDisagreeThreshold(comment) {
+        return ((0, stats_util_1.getTotalDisagreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate) >=
+            this.minCommonGroundProb &&
+            (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) <=
+                this.minUncertaintyProb - this.uncertaintyBuffer);
+    }
+    /**
+     * Gets the topK disagreed upon comments across.
+     *
+     * @param k dfaults to this.maxSampleSize
+     * @returns the top disagreed on comments
+     */
+    getCommonGroundDisagreeComments(k = this.maxSampleSize) {
+        return this.topK((comment) => (0, stats_util_1.getTotalDisagreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate), k, 
+        // Before using Group Informed Consensus a minimum bar of agreement between groups is enforced
+        (comment) => this.meetsCommonGroundDisagreeThreshold(comment));
+    }
+    /** Returns a score indicating how well a comment represents a difference of opinions. This
+     * score prioritizes comments where the agreement rate and disagreement rate are
+     * both high, and the pass rate is low.*/
+    getDifferenceOfOpinionScore(comment) {
+        return (1 -
+            Math.abs((0, stats_util_1.getTotalAgreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate) -
+                (0, stats_util_1.getTotalDisagreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate)) -
+            (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate));
+    }
+    /**
+     * Gets the topK agreed upon comments based on highest % of agree votes.
+     *
+     * @param k the number of comments to get
+     * @returns the top differences of opinion comments
+     */
+    getDifferenceOfOpinionComments(k = this.maxSampleSize) {
+        return this.topK(
+        // Rank comments with the same agree and disagree rates the most highly and prefer when these
+        // values are higher. So the best score would be when both the agree rate and the disagree
+        // rate are 0.5.
+        (comment) => this.getDifferenceOfOpinionScore(comment), k, 
+        // Before getting the top differences comments, enforce a minimum level of difference of
+        // opinion.
+        (comment) => (0, stats_util_1.getTotalAgreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate) >=
+            this.minDifferenceProb &&
+            (0, stats_util_1.getTotalAgreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate) <=
+                this.maxDifferenceProb &&
+            (0, stats_util_1.getTotalDisagreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate) >=
+                this.minDifferenceProb &&
+            (0, stats_util_1.getTotalDisagreeRate)(comment.voteInfo, this.includePasses, this.asProbabilityEstimate) <=
+                this.maxDifferenceProb &&
+            (0, stats_util_1.getTotalPassRate)(comment.voteInfo, this.asProbabilityEstimate) <=
+                this.minUncertaintyProb - this.uncertaintyBuffer);
+    }
+    getDifferencesOfOpinionNoCommentsMessage() {
+        const minThreshold = (0, sensemaker_utils_1.decimalToPercent)(this.minDifferenceProb);
+        const maxThreshold = (0, sensemaker_utils_1.decimalToPercent)(this.maxDifferenceProb);
+        return (`No statements met the thresholds necessary to be considered as a significant ` +
+            `difference of opinion (at least ${this.minVoteCount} votes, and both an agreement rate ` +
+            `and disagree rate between ${minThreshold}% and ${maxThreshold}%).`);
+    }
 }
 exports.MajoritySummaryStats = MajoritySummaryStats;

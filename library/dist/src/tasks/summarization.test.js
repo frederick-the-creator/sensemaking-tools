@@ -16,29 +16,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const group_informed_1 = require("../stats/group_informed");
 const summarization_1 = require("./summarization");
 describe("SummaryTest", () => {
-  it("should quantify topic names", () => {
-    const topicStats = [
-      {
-        name: "Topic A",
-        commentCount: 5,
-        summaryStats: new group_informed_1.GroupedSummaryStats([{ id: "1", text: "comment1" }]),
-        subtopicStats: [
-          {
-            name: "Subtopic A.1",
-            commentCount: 2,
-            summaryStats: new group_informed_1.GroupedSummaryStats([{ id: "1", text: "comment1" }]),
-          },
-          {
-            name: "Subtopic A.2",
-            commentCount: 3,
-            summaryStats: new group_informed_1.GroupedSummaryStats([{ id: "2", text: "comment2" }]),
-          },
-        ],
-      },
-    ];
-    const expectedQuantified = {
-      "Topic A (5 comments)": ["Subtopic A.1 (2 comments)", "Subtopic A.2 (3 comments)"],
-    };
-    expect((0, summarization_1._quantifyTopicNames)(topicStats)).toEqual(expectedQuantified);
-  });
+    it("should quantify topic names", () => {
+        const topicStats = [
+            {
+                name: "Topic A",
+                commentCount: 5,
+                summaryStats: new group_informed_1.GroupedSummaryStats([{ id: "1", text: "comment1" }]),
+                subtopicStats: [
+                    {
+                        name: "Subtopic A.1",
+                        commentCount: 2,
+                        summaryStats: new group_informed_1.GroupedSummaryStats([{ id: "1", text: "comment1" }]),
+                    },
+                    {
+                        name: "Subtopic A.2",
+                        commentCount: 3,
+                        summaryStats: new group_informed_1.GroupedSummaryStats([{ id: "2", text: "comment2" }]),
+                    },
+                ],
+            },
+        ];
+        const expectedQuantified = {
+            "Topic A (5 comments)": ["Subtopic A.1 (2 comments)", "Subtopic A.2 (3 comments)"],
+        };
+        expect((0, summarization_1._quantifyTopicNames)(topicStats)).toEqual(expectedQuantified);
+    });
 });

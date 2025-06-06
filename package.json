@@ -14,7 +14,7 @@
     "prepare": "husky && husky install",
     "lint": "eslint . --fix --max-warnings=0",
     "format": "prettier . --write",
-    "build": "tsc"
+    "build": "cd library && tsc"
   },
   "repository": {
     "type": "git",

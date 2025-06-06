@@ -11,17 +11,8 @@ import { Model } from "../models/model";
  * @param additionalContext - extra context to be included to the LLM prompt
  * @returns The categorized comments.
  */
-export declare function categorizeWithRetry(
-  model: Model,
-  instructions: string,
-  inputComments: Comment[],
-  topics: Topic[],
-  additionalContext?: string
-): Promise<CommentRecord[]>;
-export declare function topicCategorizationPrompt(
-  topics: Topic[],
-  prompt_categorise_comments?: string
-): string;
+export declare function categorizeWithRetry(model: Model, instructions: string, inputComments: Comment[], topics: Topic[], additionalContext?: string): Promise<CommentRecord[]>;
+export declare function topicCategorizationPrompt(topics: Topic[], prompt_categorise_comments?: string): string;
 /**
  * Validates categorized comments, checking for:
  *  - Extra comments (not present in the original input)
@@ -34,13 +25,9 @@ export declare function topicCategorizationPrompt(
  *  - `validCommentRecords`: comments that passed validation.
  *  - `commentsWithInvalidTopics`: comments that failed validation.
  */
-export declare function validateCommentRecords(
-  commentRecords: CommentRecord[],
-  inputComments: Comment[],
-  topics: Topic[]
-): {
-  commentsPassedValidation: CommentRecord[];
-  commentsWithInvalidTopics: CommentRecord[];
+export declare function validateCommentRecords(commentRecords: CommentRecord[], inputComments: Comment[], topics: Topic[]): {
+    commentsPassedValidation: CommentRecord[];
+    commentsWithInvalidTopics: CommentRecord[];
 };
 /**
  * Finds comments that are missing from the categorized output.
@@ -48,10 +35,7 @@ export declare function validateCommentRecords(
  * @param uncategorized The current set of uncategorized comments to check if any are missing in the model response.
  * @returns An array of comments that were present in the input, but not in categorized.
  */
-export declare function findMissingComments(
-  commentRecords: CommentRecord[],
-  uncategorized: Comment[]
-): Comment[];
+export declare function findMissingComments(commentRecords: CommentRecord[], uncategorized: Comment[]): Comment[];
 export declare function getTopicDepthFromTopics(topics: Topic[], currentDepth?: number): number;
 /**
  * Categorize comments one level at a time.
@@ -70,22 +54,5 @@ export declare function getTopicDepthFromTopics(topics: Topic[], currentDepth?: 
  * @param factor the factor to pass to learnOneLevelOfTopics
  * @returns the comments categorized to the level specified by topicDepth
  */
-export declare function categorizeCommentsRecursive(
-  comments: Comment[],
-  topicDepth: 1 | 2 | 3,
-  model: Model,
-  topics?: Topic[],
-  additionalContext?: string,
-  theme?: string,
-  factor?: string,
-  prompt_categorise_comments?: string,
-  prompt_learn_factor?: string,
-  prompt_learn_metrics?: string
-): Promise<Comment[]>;
-export declare function oneLevelCategorization(
-  comments: Comment[],
-  model: Model,
-  topics: Topic[],
-  additionalContext?: string,
-  prompt_categorise_comments?: string
-): Promise<Comment[]>;
+export declare function categorizeCommentsRecursive(comments: Comment[], topicDepth: 1 | 2 | 3, model: Model, topics?: Topic[], additionalContext?: string, theme?: string, factor?: string, prompt_categorise_comments?: string, prompt_learn_factors?: string, prompt_learn_metrics?: string, prompt_learn_themes?: string): Promise<Comment[]>;
+export declare function oneLevelCategorization(comments: Comment[], model: Model, topics: Topic[], additionalContext?: string, prompt_categorise_comments?: string): Promise<Comment[]>;

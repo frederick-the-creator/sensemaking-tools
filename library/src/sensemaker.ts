@@ -160,10 +160,11 @@ export class Sensemaker {
     theme?: string,
     factor?: string,
     prompt_categorise_comments?: string,
-    prompt_learn_factor?: string,
-    prompt_learn_metrics?: string
+    prompt_learn_factors?: string,
+    prompt_learn_metrics?: string,
+    prompt_learn_themes?: string
   ): Promise<Comment[]> {
-    const startTime = performance.now();
+    // const startTime = performance.now();
     if (!includeSubtopics && topicDepth && topicDepth > 1) {
       throw Error("topicDepth can only be set when includeSubtopics is true");
     }
@@ -179,8 +180,9 @@ export class Sensemaker {
       theme,
       factor,
       prompt_categorise_comments,
-      prompt_learn_factor,
-      prompt_learn_metrics
+      prompt_learn_factors,
+      prompt_learn_metrics,
+      prompt_learn_themes
     );
 
     // console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);

@@ -9,11 +9,7 @@ import { Comment, CommentWithVoteInfo, VoteTally, VoteInfo } from "../types";
  * probability estimate.
  * @returns the actual or estimated agree probability
  */
-export declare function getAgreeRate(
-  voteTally: VoteTally,
-  includePasses: boolean,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getAgreeRate(voteTally: VoteTally, includePasses: boolean, asProbabilityEstimate?: boolean): number;
 /**
  * Compute the probability of an pass vote for a given vote tally entry.
  * @param voteTally the votes to use for the calculation
@@ -35,11 +31,7 @@ export declare function getStandardDeviation(numbers: number[]): number;
  * probability estimate.
  * @returns the actual or estimated agree probability
  */
-export declare function getTotalAgreeRate(
-  voteInfo: VoteInfo,
-  includePasses: boolean,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getTotalAgreeRate(voteInfo: VoteInfo, includePasses: boolean, asProbabilityEstimate?: boolean): number;
 /**
  * Compute the probability of an pass vote for a given set of vote tallies.
  * @param voteInfo the votes to use for the calculation
@@ -49,10 +41,7 @@ export declare function getTotalAgreeRate(
  * probability estimate.
  * @returns the actual or estimated pass probability
  */
-export declare function getTotalPassRate(
-  voteInfo: VoteInfo,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getTotalPassRate(voteInfo: VoteInfo, asProbabilityEstimate?: boolean): number;
 /**
  * Compute the probability of an disagree vote for a given set of vote tallies.
  * @param voteInfo the votes to use for the calculation
@@ -63,11 +52,7 @@ export declare function getTotalPassRate(
  * probability estimate.
  * @returns the actual or estimated disagree probability
  */
-export declare function getTotalDisagreeRate(
-  voteInfo: VoteInfo,
-  includePasses: boolean,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getTotalDisagreeRate(voteInfo: VoteInfo, includePasses: boolean, asProbabilityEstimate?: boolean): number;
 /**
  * Computes group informed (agree) consensus for a comment's vote tallies,
  * computed as the product of the aggree probabilities across groups.
@@ -82,10 +67,7 @@ export declare function getGroupInformedConsensus(comment: CommentWithVoteInfo):
  * probability estimate.
  * @returns the minimum agree probability across all groups
  */
-export declare function getMinAgreeProb(
-  comment: CommentWithVoteInfo,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getMinAgreeProb(comment: CommentWithVoteInfo, asProbabilityEstimate?: boolean): number;
 /**
  * Compute the probability of an disagree vote for a given vote tally entry.
  * @param voteTally the votes to use for the calculation
@@ -96,11 +78,7 @@ export declare function getMinAgreeProb(
  * probability estimate.
  * @returns the actual or estimated disagree probability
  */
-export declare function getDisagreeRate(
-  voteTally: VoteTally,
-  includePasses: boolean,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getDisagreeRate(voteTally: VoteTally, includePasses: boolean, asProbabilityEstimate?: boolean): number;
 /**
  * Computes group informed (disagree) consensus for a comment's vote tallies
  * computed as the product of disaggree probabilities across groups.
@@ -109,10 +87,7 @@ export declare function getDisagreeRate(
  * and to avoid division/multiplication by zero. This is technically a simple maxima a priori (MAP)
  * probability estimate.
  */
-export declare function getGroupInformedDisagreeConsensus(
-  comment: CommentWithVoteInfo,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getGroupInformedDisagreeConsensus(comment: CommentWithVoteInfo, asProbabilityEstimate?: boolean): number;
 /**
  * A function which returns the minimum disagree probability across groups
  * @param comment the comment with associated votes to get the probability for
@@ -121,10 +96,7 @@ export declare function getGroupInformedDisagreeConsensus(
  * and to avoid division/multiplication by zero. This is technically a simple maxima a priori (MAP)
  * probability estimate.
  */
-export declare function getMinDisagreeProb(
-  comment: CommentWithVoteInfo,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getMinDisagreeProb(comment: CommentWithVoteInfo, asProbabilityEstimate?: boolean): number;
 /**
  * Computes the difference between the MAP probability estimate of agreeing within
  * a given group as compared with the rest of the conversation.
@@ -135,11 +107,7 @@ export declare function getMinDisagreeProb(
  * probability estimate.
  * @returns the numeric difference in estimated agree probabilities
  */
-export declare function getGroupAgreeProbDifference(
-  comment: CommentWithVoteInfo,
-  group: string,
-  asProbabilityEstimate?: boolean
-): number;
+export declare function getGroupAgreeProbDifference(comment: CommentWithVoteInfo, group: string, asProbabilityEstimate?: boolean): number;
 /**
  * Computes the maximal absolute value of `getGroupAgreeProbDifference` across
  * opinion groups present in comment.groupVoteTallies.

@@ -3,26 +3,23 @@ import { Summary, Comment, Topic } from "../src/types";
  * Core comment columns, sans any vote tally rows
  */
 type CoreCommentCsvRow = {
-  index: number;
-  timestamp: number;
-  datetime: string;
-  "comment-id": number;
-  "author-id": number;
-  agrees: number;
-  disagrees: number;
-  moderated: number;
-  comment_text: string;
-  passes: number;
-  topics: string;
-  topic: string;
-  subtopic: string;
+    index: number;
+    timestamp: number;
+    datetime: string;
+    "comment-id": number;
+    "author-id": number;
+    agrees: number;
+    disagrees: number;
+    moderated: number;
+    comment_text: string;
+    passes: number;
+    topics: string;
+    topic: string;
+    subtopic: string;
 };
-type VoteTallyGroupKey =
-  | `${string}-agree-count`
-  | `${string}-disagree-count`
-  | `${string}-pass-count`;
+type VoteTallyGroupKey = `${string}-agree-count` | `${string}-disagree-count` | `${string}-pass-count`;
 export interface VoteTallyCsvRow {
-  [key: VoteTallyGroupKey]: number;
+    [key: VoteTallyGroupKey]: number;
 }
 export type CommentCsvRow = VoteTallyCsvRow & CoreCommentCsvRow;
 /**
@@ -38,10 +35,7 @@ export declare function writeSummaryToGroundedCSV(summary: Summary, outputFilePa
  * @param comments The comments from which topics need to be identified
  * @returns Promise resolving to a Topic collection containing the newly discovered topics and subtopics for the given comments
  */
-export declare function getTopicsAndSubtopics(
-  project: string,
-  comments: Comment[]
-): Promise<Topic[]>;
+export declare function getTopicsAndSubtopics(project: string, comments: Comment[]): Promise<Topic[]>;
 /**
  * Runs the summarization routines for the data set.
  * @param project The Vertex GCloud project name
@@ -50,12 +44,7 @@ export declare function getTopicsAndSubtopics(
  * @param additionalContext Additional context about the conversation to pass through
  * @returns Promise resolving to a Summary object containing the summary of the comments
  */
-export declare function getSummary(
-  project: string,
-  comments: Comment[],
-  topics?: Topic[],
-  additionalContext?: string
-): Promise<Summary>;
+export declare function getSummary(project: string, comments: Comment[], topics?: Topic[], additionalContext?: string): Promise<Summary>;
 export declare function writeSummaryToHtml(summary: Summary, outputFile: string): void;
 export declare function concatTopics(comment: Comment): string;
 /**

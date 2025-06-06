@@ -6,32 +6,32 @@ import { RecursiveSummary } from "./recursive_summarization";
  * which specific method is used to generate this part of the summary.
  */
 export interface OverviewInput {
-  summaryStats: SummaryStats;
-  topicsSummary: SummaryContent;
-  method?: "one-shot" | "per-topic";
+    summaryStats: SummaryStats;
+    topicsSummary: SummaryContent;
+    method?: "one-shot" | "per-topic";
 }
 /**
  * Generates a summary of the key findings in the conversation, in terms of the top-level
  * topics.
  */
 export declare class OverviewSummary extends RecursiveSummary<OverviewInput> {
-  getSummary(): Promise<SummaryContent>;
-  /**
-   * Produces a summary of the key findings within the conversation, based on the
-   * results of the topicsSummary.
-   * @returns A promise of the resulting summary string
-   */
-  oneShotSummary(): Promise<string>;
-  /**
-   * Generates a summary one topic at a time, and then programatically concatenates them.
-   * @returns A promise of the resulting summary string
-   */
-  perTopicSummary(): Promise<string>;
-  /**
-   * @returns Topic names with the percentage of comments classified thereunder in parentheses
-   */
-  private topicNames;
-  private getTopicNameAndCommentPercentage;
+    getSummary(): Promise<SummaryContent>;
+    /**
+     * Produces a summary of the key findings within the conversation, based on the
+     * results of the topicsSummary.
+     * @returns A promise of the resulting summary string
+     */
+    oneShotSummary(): Promise<string>;
+    /**
+     * Generates a summary one topic at a time, and then programatically concatenates them.
+     * @returns A promise of the resulting summary string
+     */
+    perTopicSummary(): Promise<string>;
+    /**
+     * @returns Topic names with the percentage of comments classified thereunder in parentheses
+     */
+    private topicNames;
+    private getTopicNameAndCommentPercentage;
 }
 /**
  * Remove all empty lines from the input string, useful when a model response formats

@@ -16,9 +16,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = void 0;
 // An abstract base class that defines how to interact with models.
 class Model {
-  constructor() {
-    // The best batch size to use for categorization.
-    this.categorizationBatchSize = 20;
-  }
+    constructor() {
+        // The best batch size to use for categorization.
+        this.categorizationBatchSize = 20;
+    }
 }
 exports.Model = Model;
