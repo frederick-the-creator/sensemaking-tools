@@ -45,23 +45,12 @@
     "typescript-eslint": "^8.16.0"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.25.4",
     "@google-cloud/vertexai": "^1.10.0",
-    "@sinclair/typebox": "^0.34.3",
-    "@tensorflow/tfjs": "^4.22.0",
-    "@tensorflow/tfjs-node-gpu": "^4.22.0",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "babel-jest": "^29.7.0",
-    "colors": "^1.4.0",
-    "diff": "^7.0.0",
+    "@sinclair/typebox": "^0.27.8",
     "ts-node": "^10.9.2"
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix",
     "*.{js,jsx,ts,tsx}": "prettier --write"
-  },
-  "dependencies": {
-    "@sinclair/typebox": "^0.27.8",
-    "ts-node": "^10.9.2"
   }
 }
