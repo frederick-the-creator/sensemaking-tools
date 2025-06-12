@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { CommentRecord, Comment, Topic, TopicCategorizedComment } from "../types";
+import { CommentRecord, Comment, Topic, FlatTopic, TopicCategorizedComment } from "../types";
 import { Model } from "../models/model";
 import { executeConcurrently, getPrompt, hydrateCommentRecord } from "../sensemaker_utils";
 import { TSchema, Type } from "@sinclair/typebox";
@@ -43,7 +43,7 @@ export async function categorizeWithRetry(
   let categorized: CommentRecord[] = [];
 
   for (let attempts = 1; attempts <= MAX_RETRIES; attempts++) {
-    // convert JSON to string representation that will be sent to the model
+    // convert JSON to string refation that will be sent to the model
     const uncategorizedCommentsForModel: string[] = uncategorized.map((comment) =>
       JSON.stringify({ id: comment.id, text: comment.text })
     );
@@ -67,10 +67,12 @@ export async function categorizeWithRetry(
     }
 
     if (attempts < MAX_RETRIES) {
-      // console.warn(
-      //   `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
-      // );
+      console.warn(
+        `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
+      );
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+    } else {
+      categorized = categorized.concat(assignDefaultCategory(uncategorized));
     }
   }
 
@@ -182,7 +184,7 @@ function isExtraComment(comment: Comment | CommentRecord, inputCommentIds: Set<s
  */
 function hasEmptyTopicsOrSubtopics(comment: CommentRecord): boolean {
   if (comment.topics.length === 0) {
-    // console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
+    console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
     return true;
   }
   if (
@@ -190,7 +192,7 @@ function hasEmptyTopicsOrSubtopics(comment: CommentRecord): boolean {
       (topic: Topic) => "subtopics" in topic && (!topic.subtopics || topic.subtopics.length === 0)
     )
   ) {
-    // console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
+    console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
@@ -264,7 +266,7 @@ export function findMissingComments(
   );
 
   if (missingComments.length > 0) {
-    // console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
+    console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
   }
   return missingComments;
 }
@@ -310,25 +312,25 @@ function processCategorizedComments(
   };
 }
 
-// /**
-//  * Assigns the default "Other" topic and optionally "Uncategorized" subtopic to comments that
-//  * failed categorization.
-//  *
-//  * @param uncategorized The array of comments that failed categorization.
-//  * @returns the uncategorized comments now categorized into a "Other" category.
-//  */
-// function assignDefaultCategory(uncategorized: Comment[]): CommentRecord[] {
-//   console.warn(
-//     `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
-//   );
-//   console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
-//   return uncategorized.map((comment: Comment): CommentRecord => {
-//     return {
-//       ...comment,
-//       topics: [{ name: "Other" } as FlatTopic],
-//     };
-//   });
-// }
+/**
+ * Assigns the default "Other" topic and optionally "Uncategorized" subtopic to comments that
+ * failed categorization.
+ *
+ * @param uncategorized The array of comments that failed categorization.
+ * @returns the uncategorized comments now categorized into a "Other" category.
+ */
+function assignDefaultCategory(uncategorized: Comment[]): CommentRecord[] {
+  console.warn(
+    `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
+  );
+  console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
+  return uncategorized.map((comment: Comment): CommentRecord => {
+    return {
+      ...comment,
+      topics: [{ name: "Other" } as FlatTopic],
+    };
+  });
+}
 
 export function getTopicDepthFromTopics(topics: Topic[], currentDepth: number = 1): number {
   if (!topics || topics.length === 0) {
@@ -562,14 +564,14 @@ export async function categorizeCommentsRecursive(
   prompt_learn_themes?: string
 ): Promise<Comment[]> {
   const currentTopicDepth = getTopicDepth(comments);
-  // console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
+  console.log("Identifying topics and categorizing statements at depth=", currentTopicDepth);
   if (currentTopicDepth >= topicDepth) {
     return comments;
   }
   if (!topics) {
     // Case where no topics are provided (used for Factor and Metric Analysis, and Thematic Analysis when theme learning is required)
-    // If block does both topic learning and categorisation. 
-    console.log("Learn topics branch triggered")
+    // If block does both topic learning and categorisation.
+    console.log("Learn topics branch triggered");
     topics = await learnOneLevelOfTopics(
       comments,
       model,
@@ -583,7 +585,6 @@ export async function categorizeCommentsRecursive(
       prompt_learn_themes
     );
 
-
     let topicsCategorise = [];
     if (prompt_learn_themes) {
       topicsCategorise = topics.map((t) => ({ name: t.name }));
@@ -593,8 +594,6 @@ export async function categorizeCommentsRecursive(
       );
     }
 
-    console.log("topics", topics);
-    console.log("topicsCategorise", topicsCategorise);
     comments = await oneLevelCategorization(
       comments,
       model,
@@ -611,7 +610,7 @@ export async function categorizeCommentsRecursive(
 
   if (topics && currentTopicDepth === 0) {
     // Cases where topics ARE provided (used for Thematic Analysis)
-    // If block does categorisation only. 
+    // If block does categorisation only.
     comments = await oneLevelCategorization(
       comments,
       model,
@@ -690,9 +689,9 @@ export async function oneLevelCategorization(
 
   // categorize comment batches, potentially in parallel
   const totalBatches = Math.ceil(comments.length / model.categorizationBatchSize);
-  // console.log(
-  //   `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
-  // );
+  console.log(
+    `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
+  );
   const CategorizedBatches: CommentRecord[][] = await executeConcurrently(batchesToCategorize);
 
   // flatten categorized batches

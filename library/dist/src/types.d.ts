@@ -3,7 +3,7 @@ import { TSchema, type Static } from "@sinclair/typebox";
  * TypeBox JSON Schema representation of a single topic record as a name, with no subtopics.
  */
 export declare const FlatTopic: import("@sinclair/typebox").TObject<{
-    name: import("@sinclair/typebox").TString;
+  name: import("@sinclair/typebox").TString<string>;
 }>;
 /**
  * Type representation of a single topic record as a name, with no subtopics.
@@ -13,10 +13,12 @@ export type FlatTopic = Static<typeof FlatTopic>;
  * TypeBox JSON Schema representation of a topic record as a name, with flat subtopics.
  */
 export declare const NestedTopic: import("@sinclair/typebox").TObject<{
-    name: import("@sinclair/typebox").TString;
-    subtopics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-        name: import("@sinclair/typebox").TString;
-    }>>;
+  name: import("@sinclair/typebox").TString<string>;
+  subtopics: import("@sinclair/typebox").TArray<
+    import("@sinclair/typebox").TObject<{
+      name: import("@sinclair/typebox").TString<string>;
+    }>
+  >;
 }>;
 /**
  * Type representation of a topic record as a name, with flat subtopics.
@@ -25,14 +27,21 @@ export type NestedTopic = Static<typeof NestedTopic>;
 /**
  * TypeBox JSON Schema representation of an abstract topic, either with or without subtopics.
  */
-export declare const Topic: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TObject<{
-    name: import("@sinclair/typebox").TString;
-}>, import("@sinclair/typebox").TObject<{
-    name: import("@sinclair/typebox").TString;
-    subtopics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-        name: import("@sinclair/typebox").TString;
-    }>>;
-}>]>;
+export declare const Topic: import("@sinclair/typebox").TUnion<
+  [
+    import("@sinclair/typebox").TObject<{
+      name: import("@sinclair/typebox").TString<string>;
+    }>,
+    import("@sinclair/typebox").TObject<{
+      name: import("@sinclair/typebox").TString<string>;
+      subtopics: import("@sinclair/typebox").TArray<
+        import("@sinclair/typebox").TObject<{
+          name: import("@sinclair/typebox").TString<string>;
+        }>
+      >;
+    }>,
+  ]
+>;
 /**
  * Type representation of an abstract topic, either with or without subtopics.
  */
@@ -41,10 +50,12 @@ export type Topic = Static<typeof Topic>;
  * TypeBox JSON Schema representation of a comment id, together with a list of associated topics.
  */
 export declare const TopicCategorizedComment: import("@sinclair/typebox").TObject<{
-    id: import("@sinclair/typebox").TString;
-    topics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-        name: import("@sinclair/typebox").TString;
-    }>>;
+  id: import("@sinclair/typebox").TString<string>;
+  topics: import("@sinclair/typebox").TArray<
+    import("@sinclair/typebox").TObject<{
+      name: import("@sinclair/typebox").TString<string>;
+    }>
+  >;
 }>;
 /**
  * Type representation of a comment id, together with a list of associated topics.
@@ -54,13 +65,17 @@ export type TopicCategorizedComment = Static<typeof TopicCategorizedComment>;
  * TypeBox JSON Schema representation of a comment id, together with a list of associated topics and subtopics.
  */
 export declare const SubtopicCategorizedComment: import("@sinclair/typebox").TObject<{
-    id: import("@sinclair/typebox").TString;
-    topics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-        name: import("@sinclair/typebox").TString;
-        subtopics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-            name: import("@sinclair/typebox").TString;
-        }>>;
-    }>>;
+  id: import("@sinclair/typebox").TString<string>;
+  topics: import("@sinclair/typebox").TArray<
+    import("@sinclair/typebox").TObject<{
+      name: import("@sinclair/typebox").TString<string>;
+      subtopics: import("@sinclair/typebox").TArray<
+        import("@sinclair/typebox").TObject<{
+          name: import("@sinclair/typebox").TString<string>;
+        }>
+      >;
+    }>
+  >;
 }>;
 /**
  * Type representation of a comment id, together with a list of associated topics and subtopics.
@@ -69,20 +84,31 @@ export type SubtopicCategorizedComment = Static<typeof SubtopicCategorizedCommen
 /**
  * TypeBox JSON Schema representation of a comment id, together with a list of associated topics and possibly subtopics.
  */
-export declare const CommentRecord: import("@sinclair/typebox").TUnion<[import("@sinclair/typebox").TObject<{
-    id: import("@sinclair/typebox").TString;
-    topics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-        name: import("@sinclair/typebox").TString;
-    }>>;
-}>, import("@sinclair/typebox").TObject<{
-    id: import("@sinclair/typebox").TString;
-    topics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-        name: import("@sinclair/typebox").TString;
-        subtopics: import("@sinclair/typebox").TArray<import("@sinclair/typebox").TObject<{
-            name: import("@sinclair/typebox").TString;
-        }>>;
-    }>>;
-}>]>;
+export declare const CommentRecord: import("@sinclair/typebox").TUnion<
+  [
+    import("@sinclair/typebox").TObject<{
+      id: import("@sinclair/typebox").TString<string>;
+      topics: import("@sinclair/typebox").TArray<
+        import("@sinclair/typebox").TObject<{
+          name: import("@sinclair/typebox").TString<string>;
+        }>
+      >;
+    }>,
+    import("@sinclair/typebox").TObject<{
+      id: import("@sinclair/typebox").TString<string>;
+      topics: import("@sinclair/typebox").TArray<
+        import("@sinclair/typebox").TObject<{
+          name: import("@sinclair/typebox").TString<string>;
+          subtopics: import("@sinclair/typebox").TArray<
+            import("@sinclair/typebox").TObject<{
+              name: import("@sinclair/typebox").TString<string>;
+            }>
+          >;
+        }>
+      >;
+    }>,
+  ]
+>;
 /**
  * Type representation of a comment id, together with a list of associated topics and possibly subtopics.
  */
@@ -94,36 +120,36 @@ export type CommentRecord = Static<typeof CommentRecord>;
  * AGGREGATE_VOTE - summarizes the comments based on the majority vote. Does not use votes.
  */
 export declare enum SummarizationType {
-    GROUP_INFORMED_CONSENSUS = 0,
-    AGGREGATE_VOTE = 1
+  GROUP_INFORMED_CONSENSUS = 0,
+  AGGREGATE_VOTE = 1,
 }
 /**
  * Represents a portion of a summary, optionally linked to representative comments.
  */
 export interface SummaryContent {
-    /**
-     * Optional data type, for filtering (etc.) operations based on non-displayed data
-     */
-    type?: string;
-    /**
-     * The name of the section
-     */
-    title?: string;
-    /**
-     * The text content for this part of the summary.
-     */
-    text: string;
-    /**
-     * An optional array of comment IDs that are representative of this content.
-     * These IDs can be used for grounding and providing context.
-     * Could be empty for fluffy/connecting text (e.g., ", and also" between two verifiable points).
-     */
-    citations?: string[];
-    /**
-     * Summaries that belong underneath this summary. This is meant to capture relations like
-     * topic/subtopic.
-     */
-    subContents?: SummaryContent[];
+  /**
+   * Optional data type, for filtering (etc.) operations based on non-displayed data
+   */
+  type?: string;
+  /**
+   * The name of the section
+   */
+  title?: string;
+  /**
+   * The text content for this part of the summary.
+   */
+  text: string;
+  /**
+   * An optional array of comment IDs that are representative of this content.
+   * These IDs can be used for grounding and providing context.
+   * Could be empty for fluffy/connecting text (e.g., ", and also" between two verifiable points).
+   */
+  citations?: string[];
+  /**
+   * Summaries that belong underneath this summary. This is meant to capture relations like
+   * topic/subtopic.
+   */
+  subContents?: SummaryContent[];
 }
 /**
  * Specifies the format for citations within a summary.
@@ -153,36 +179,36 @@ export type CitationFormat = "XML" | "MARKDOWN";
  * If a SummaryContent contains a claim, it should be grounded by representative comments.
  */
 export declare class Summary {
-    /**
-     * An array of SummaryContent objects, each representing a part of the summary.
-     */
-    contents: SummaryContent[];
-    comments: Comment[];
-    constructor(contents: SummaryContent[], comments: Comment[]);
-    /**
-     * Returns the text of the summary, formatted according to the specified citation format.
-     * @param format The desired format for citations. Can be "XML" or "MARKDOWN".
-     * @returns The formatted summary text.  Throws an error if an unsupported format is provided.
-     */
-    getText(format: CitationFormat): string;
-    /**
-     * Filter the contents according to removeFn, using sensemaker utils filterSummaryContent
-     * @param removeFn Decides whether SummaryContent object should be removed or not
-     * @returns boolean
-     */
-    withoutContents(removeFn: (sc: SummaryContent) => boolean): Summary;
-    private getContentText;
-    private getCitationText;
+  /**
+   * An array of SummaryContent objects, each representing a part of the summary.
+   */
+  contents: SummaryContent[];
+  comments: Comment[];
+  constructor(contents: SummaryContent[], comments: Comment[]);
+  /**
+   * Returns the text of the summary, formatted according to the specified citation format.
+   * @param format The desired format for citations. Can be "XML" or "MARKDOWN".
+   * @returns The formatted summary text.  Throws an error if an unsupported format is provided.
+   */
+  getText(format: CitationFormat): string;
+  /**
+   * Filter the contents according to removeFn, using sensemaker utils filterSummaryContent
+   * @param removeFn Decides whether SummaryContent object should be removed or not
+   * @returns boolean
+   */
+  withoutContents(removeFn: (sc: SummaryContent) => boolean): Summary;
+  private getContentText;
+  private getCitationText;
 }
 /**
  * Aggregates a number of individual votes.
  */
 export declare class VoteTally {
-    agreeCount: number;
-    disagreeCount: number;
-    passCount?: number;
-    constructor(agreeCount: number, disagreeCount: number, passCount?: number);
-    getTotalCount(includePasses: boolean): number;
+  agreeCount: number;
+  disagreeCount: number;
+  passCount?: number;
+  constructor(agreeCount: number, disagreeCount: number, passCount?: number);
+  getTotalCount(includePasses: boolean): number;
 }
 /**
  * Checks if the data is a VoteTally object.
@@ -197,17 +223,17 @@ export declare function isVoteTallyType(data: any): data is VoteTally;
  * A text that was voted on by different groups.
  */
 export interface Comment {
-    id: string;
-    text: string;
-    voteInfo?: VoteInfo;
-    topics?: Topic[];
+  id: string;
+  text: string;
+  voteInfo?: VoteInfo;
+  topics?: Topic[];
 }
 export type VoteInfo = GroupVoteTallies | VoteTally;
 export interface CommentWithVoteInfo extends Comment {
-    voteInfo: GroupVoteTallies | VoteTally;
+  voteInfo: GroupVoteTallies | VoteTally;
 }
 export type GroupVoteTallies = {
-    [key: string]: VoteTally;
+  [key: string]: VoteTally;
 };
 /**
  * Checks if the given data is a CommentWithVoteInfo object (that is, a Comment object that includes VoteTallies), and sets the type as such if it passes.

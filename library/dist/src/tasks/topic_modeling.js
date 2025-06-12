@@ -12,15 +12,37 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+var __awaiter =
+  (this && this.__awaiter) ||
+  function (thisArg, _arguments, P, generator) {
+    function adopt(value) {
+      return value instanceof P
+        ? value
+        : new P(function (resolve) {
+            resolve(value);
+          });
+    }
     return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      function fulfilled(value) {
+        try {
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function rejected(value) {
+        try {
+          step(generator["throw"](value));
+        } catch (e) {
+          reject(e);
+        }
+      }
+      function step(result) {
+        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+      }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LEARN_TOPICS_PROMPT = void 0;
 exports.learnOneLevelOfTopicsPrompt = learnOneLevelOfTopicsPrompt;
@@ -42,28 +64,37 @@ After analysis of the comments, determine the optimal number of topics to repres
 Justify why having fewer topics would be less optimal (potentially oversimplifying and missing key nuances), and why having more topics would also be less optimal (potentially leading to redundancy and a less clear overall structure).
 After determining the optimal number of topics, identify those topics.
 `;
-function learnOneLevelOfTopicsPrompt(parentTopic, otherTopics, prompt_learn_factors, prompt_learn_metrics, prompt_learn_themes) {
-    var _a;
-    const otherTopicNames = (_a = otherTopics === null || otherTopics === void 0 ? void 0 : otherTopics.map((topic) => topic.name).join(", ")) !== null && _a !== void 0 ? _a : "";
-    if (prompt_learn_factors) {
-        prompt_learn_factors = prompt_learn_factors
-            .replace(/{{parentTopicName}}/g, parentTopic.name)
-            .replace(/{{otherTopicNames}}/g, otherTopicNames);
-        return prompt_learn_factors;
-    }
-    else if (prompt_learn_metrics) {
-        prompt_learn_metrics = prompt_learn_metrics
-            .replace(/{{parentTopicName}}/g, parentTopic.name)
-            .replace(/{{otherTopicNames}}/g, otherTopicNames);
-        return prompt_learn_metrics;
-    }
-    else if (prompt_learn_themes) {
-        prompt_learn_themes = prompt_learn_themes;
-        return prompt_learn_themes;
-    }
-    else {
-        return "No prompt provided";
-    }
+function learnOneLevelOfTopicsPrompt(
+  parentTopic,
+  otherTopics,
+  prompt_learn_factors,
+  prompt_learn_metrics,
+  prompt_learn_themes
+) {
+  var _a;
+  const otherTopicNames =
+    (_a =
+      otherTopics === null || otherTopics === void 0
+        ? void 0
+        : otherTopics.map((topic) => topic.name).join(", ")) !== null && _a !== void 0
+      ? _a
+      : "";
+  if (prompt_learn_factors) {
+    prompt_learn_factors = prompt_learn_factors
+      .replace(/{{parentTopicName}}/g, parentTopic.name)
+      .replace(/{{otherTopicNames}}/g, otherTopicNames);
+    return prompt_learn_factors;
+  } else if (prompt_learn_metrics) {
+    prompt_learn_metrics = prompt_learn_metrics
+      .replace(/{{parentTopicName}}/g, parentTopic.name)
+      .replace(/{{otherTopicNames}}/g, otherTopicNames);
+    return prompt_learn_metrics;
+  } else if (prompt_learn_themes) {
+    prompt_learn_themes = prompt_learn_themes;
+    return prompt_learn_themes;
+  } else {
+    return "No prompt provided";
+  }
 }
 // export function learnFactorForOneTopicPrompt(parentTopic: Topic, otherTopics?: Topic[]): string {
 //   const otherTopicNames = otherTopics?.map((topic) => topic.name).join(", ") ?? "";
@@ -140,19 +171,24 @@ function learnOneLevelOfTopicsPrompt(parentTopic, otherTopics, prompt_learn_fact
  * @param factor - Optional factor string to include in the prompt.
  * @returns The generated prompt string.
  */
-function generateTopicModelingPrompt(parentTopic, otherTopics, theme, factor, prompt_learn_factors, prompt_learn_metrics, prompt_learn_themes) {
-    if (theme) {
-        return learnOneLevelOfTopicsPrompt({ name: theme }, otherTopics, prompt_learn_factors);
-    }
-    else if (factor) {
-        return learnOneLevelOfTopicsPrompt({ name: factor }, otherTopics, prompt_learn_metrics);
-    }
-    else if (prompt_learn_themes) {
-        return learnOneLevelOfTopicsPrompt({ name: "NA" }, otherTopics, prompt_learn_themes);
-    }
-    else {
-        return exports.LEARN_TOPICS_PROMPT;
-    }
+function generateTopicModelingPrompt(
+  parentTopic,
+  otherTopics,
+  theme,
+  factor,
+  prompt_learn_factors,
+  prompt_learn_metrics,
+  prompt_learn_themes
+) {
+  if (theme) {
+    return learnOneLevelOfTopicsPrompt({ name: theme }, otherTopics, prompt_learn_factors);
+  } else if (factor) {
+    return learnOneLevelOfTopicsPrompt({ name: factor }, otherTopics, prompt_learn_metrics);
+  } else if (prompt_learn_themes) {
+    return learnOneLevelOfTopicsPrompt({ name: "NA" }, otherTopics, prompt_learn_themes);
+  } else {
+    return exports.LEARN_TOPICS_PROMPT;
+  }
 }
 /**
  * Learn either topics or subtopics from the given comments.
@@ -166,21 +202,54 @@ function generateTopicModelingPrompt(parentTopic, otherTopics, theme, factor, pr
  * @param factor optional factor string to include in the prompt
  * @returns the topics that are present in the comments.
  */
-function learnOneLevelOfTopics(comments, model, topic, otherTopics, additionalContext, theme, factor, prompt_learn_factors, prompt_learn_metrics, prompt_learn_themes) {
-    const instructions = generateTopicModelingPrompt(topic, otherTopics, theme, factor, prompt_learn_factors, prompt_learn_metrics, prompt_learn_themes);
-    const schema = theme || factor ? typebox_1.Type.Array(types_1.NestedTopic) : typebox_1.Type.Array(types_1.FlatTopic);
-    return (0, sensemaker_utils_1.retryCall)(function (model) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log(`Identifying topics for ${comments.length} statements`);
-            const finalPrompt = (0, sensemaker_utils_1.getPrompt)(instructions, comments.map((comment) => comment.text), additionalContext);
-            console.log("Final Prompt:", finalPrompt);
-            const llmOutput = yield model.generateData(finalPrompt, schema);
-            console.log("LLM Output:", llmOutput);
-            return llmOutput;
-        });
-    }, function (response) {
-        return learnedTopicsValid(response, topic);
-    }, model_util_1.MAX_RETRIES, "Topic identification failed.", undefined, [model], []);
+function learnOneLevelOfTopics(
+  comments,
+  model,
+  topic,
+  otherTopics,
+  additionalContext,
+  theme,
+  factor,
+  prompt_learn_factors,
+  prompt_learn_metrics,
+  prompt_learn_themes
+) {
+  const instructions = generateTopicModelingPrompt(
+    topic,
+    otherTopics,
+    theme,
+    factor,
+    prompt_learn_factors,
+    prompt_learn_metrics,
+    prompt_learn_themes
+  );
+  const schema =
+    theme || factor
+      ? typebox_1.Type.Array(types_1.NestedTopic)
+      : typebox_1.Type.Array(types_1.FlatTopic);
+  return (0, sensemaker_utils_1.retryCall)(
+    function (model) {
+      return __awaiter(this, void 0, void 0, function* () {
+        console.log(`Identifying topics for ${comments.length} statements`);
+        const finalPrompt = (0, sensemaker_utils_1.getPrompt)(
+          instructions,
+          comments.map((comment) => comment.text),
+          additionalContext
+        );
+        const llmOutput = yield model.generateData(finalPrompt, schema);
+        console.log("LLM Output:", llmOutput);
+        return llmOutput;
+      });
+    },
+    function (response) {
+      return learnedTopicsValid(response, topic);
+    },
+    model_util_1.MAX_RETRIES,
+    "Topic identification failed.",
+    undefined,
+    [model],
+    []
+  );
 }
 /**
  * Validates the topic modeling response from the LLM.
@@ -190,30 +259,38 @@ function learnOneLevelOfTopics(comments, model, topic, otherTopics, additionalCo
  * @returns True if the response is valid, false otherwise.
  */
 function learnedTopicsValid(response, parentTopic) {
-    const topicNames = response.map((topic) => topic.name);
-    // 1. If a parentTopic is provided, ensure no other top-level topics exist except "Other".
-    if (parentTopic) {
-        const allowedTopicNames = [parentTopic]
-            .map((topic) => topic.name.toLowerCase())
-            .concat("other");
-        if (!topicNames.every((name) => allowedTopicNames.includes(name.toLowerCase()))) {
-            topicNames.forEach((topicName) => {
-                if (!allowedTopicNames.includes(topicName.toLowerCase())) {
-                    console.warn("Invalid response: Found top-level topic not present in the provided topics. Provided topics: ", allowedTopicNames, " Found topic: ", topicName);
-                }
-            });
-            return false;
+  const topicNames = response.map((topic) => topic.name);
+  // 1. If a parentTopic is provided, ensure no other top-level topics exist except "Other".
+  if (parentTopic) {
+    const allowedTopicNames = [parentTopic]
+      .map((topic) => topic.name.toLowerCase())
+      .concat("other");
+    if (!topicNames.every((name) => allowedTopicNames.includes(name.toLowerCase()))) {
+      topicNames.forEach((topicName) => {
+        if (!allowedTopicNames.includes(topicName.toLowerCase())) {
+          console.warn(
+            "Invalid response: Found top-level topic not present in the provided topics. Provided topics: ",
+            allowedTopicNames,
+            " Found topic: ",
+            topicName
+          );
         }
+      });
+      return false;
     }
-    // 2. Ensure no subtopic has the same name as any main topic.
-    for (const topic of response) {
-        const subtopicNames = "subtopics" in topic ? topic.subtopics.map((subtopic) => subtopic.name) : [];
-        for (const subtopicName of subtopicNames) {
-            if (topicNames.includes(subtopicName) && subtopicName !== "Other") {
-                console.warn(`Invalid response: Subtopic "${subtopicName}" has the same name as a main topic.`);
-                return false;
-            }
-        }
+  }
+  // 2. Ensure no subtopic has the same name as any main topic.
+  for (const topic of response) {
+    const subtopicNames =
+      "subtopics" in topic ? topic.subtopics.map((subtopic) => subtopic.name) : [];
+    for (const subtopicName of subtopicNames) {
+      if (topicNames.includes(subtopicName) && subtopicName !== "Other") {
+        console.warn(
+          `Invalid response: Subtopic "${subtopicName}" has the same name as a main topic.`
+        );
+        return false;
+      }
     }
-    return true;
+  }
+  return true;
 }
