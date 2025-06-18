@@ -49,6 +49,7 @@ export function learnOneLevelOfTopicsPrompt(
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
+    console.log("prompt_learn_metrics", prompt_learn_metrics);
     return prompt_learn_metrics;
   } else if (prompt_learn_themes) {
     prompt_learn_themes = prompt_learn_themes;
@@ -208,7 +209,6 @@ export function learnOneLevelOfTopics(
         additionalContext
       );
       const llmOutput = await model.generateData(finalPrompt, schema);
-      console.log("LLM Output:", llmOutput);
       return llmOutput as Topic[];
     },
     function (response: Topic[]): boolean {

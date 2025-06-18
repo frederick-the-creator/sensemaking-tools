@@ -83,11 +83,13 @@ function learnOneLevelOfTopicsPrompt(
     prompt_learn_factors = prompt_learn_factors
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
+    console.log("prompt_learn_factors", prompt_learn_factors);
     return prompt_learn_factors;
   } else if (prompt_learn_metrics) {
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
+    console.log("prompt_learn_metrics", prompt_learn_metrics);
     return prompt_learn_metrics;
   } else if (prompt_learn_themes) {
     prompt_learn_themes = prompt_learn_themes;
