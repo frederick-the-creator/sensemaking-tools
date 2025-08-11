@@ -171,6 +171,8 @@ export class Sensemaker {
 
     // TODO: ensure the topics argument and the topics assigned to the passed in comments are in
     // sync.
+
+    console.log("Sensemaker sensemaker.ts - Begin recursive categorisation");
     const categorizedComments = await categorizeCommentsRecursive(
       comments,
       includeSubtopics ? topicDepth || 2 : 1,
