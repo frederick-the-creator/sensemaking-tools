@@ -566,22 +566,22 @@ export async function categorizeCommentsRecursive(
   const currentTopicDepth = getTopicDepth(comments);
 
   if (currentTopicDepth >= topicDepth) {
-    console.log(
-      `Sensemaker categorization.ts - Level of topic depth requiured has been achieved in recursive function, so return results:`
-    );
-    console.dir(comments, { depth: null });
+    // console.log(
+    //   `Sensemaker categorization.ts - Level of topic depth requiured has been achieved in recursive function, so return results:`
+    // );
+    // console.dir(comments, { depth: null });
     return comments;
   }
 
-  console.log(
-    "Sensemaker categorization.ts - Identifying topics and categorizing statements at depth=",
-    currentTopicDepth
-  );
+  // console.log(
+  //   "Sensemaker categorization.ts - Identifying topics and categorizing statements at depth=",
+  //   currentTopicDepth
+  // );
 
   if (!topics) {
     // Case where no topics are provided (used for Factor and Metric Analysis, and Thematic Analysis when theme learning is required)
     // If block does both topic learning and categorisation.
-    console.log("Sensemaker categorization.ts - Topics NOT provided, learn and then categorise");
+    // console.log("Sensemaker categorization.ts - Topics NOT provided, learn and then categorise");
     topics = await learnOneLevelOfTopics(
       comments,
       model,
@@ -595,8 +595,8 @@ export async function categorizeCommentsRecursive(
       prompt_learn_themes
     );
 
-    console.log("Sensemaker categorization.ts - Topics learnt: ");
-    console.dir(topics, { depth: null });
+    // console.log("Sensemaker categorization.ts - Topics learnt: ");
+    // console.dir(topics, { depth: null });
 
     let topicsCategorise = [];
     if (prompt_learn_themes) {
@@ -624,7 +624,7 @@ export async function categorizeCommentsRecursive(
   if (topics && currentTopicDepth === 0) {
     // Cases where topics ARE provided (used for Thematic Analysis)
     // If block does categorisation only.
-    console.log("Sensemaker categorization.ts - Topics provided, categorise");
+    // console.log("Sensemaker categorization.ts - Topics provided, categorise");
     comments = await oneLevelCategorization(
       comments,
       model,

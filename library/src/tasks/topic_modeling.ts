@@ -49,7 +49,7 @@ export function learnOneLevelOfTopicsPrompt(
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    console.log("prompt_learn_metrics", prompt_learn_metrics);
+    // console.log("prompt_learn_metrics", prompt_learn_metrics);
     return prompt_learn_metrics;
   } else if (prompt_learn_themes) {
     prompt_learn_themes = prompt_learn_themes;
@@ -124,17 +124,17 @@ export function learnOneLevelOfTopics(
 
   return retryCall(
     async function (model: Model): Promise<Topic[]> {
-      console.log(
-        `Sensemaker topic_modeling.ts - Identifying topics for ${comments.length} statements`
-      );
+      // console.log(
+      //   `Sensemaker topic_modeling.ts - Identifying topics for ${comments.length} statements`
+      // );
 
-      if (prompt_learn_factors) {
-        console.log("Sensemaker topic_modelling.ts - Learn factors prompt is being used");
-      } else if (prompt_learn_metrics) {
-        console.log("Sensemaker topic_modelling.ts - Learn metrics prompt is being used");
-      } else {
-        console.log("Sensemaker topic_modelling.ts - No prompt is being used");
-      }
+      // if (prompt_learn_factors) {
+      //   console.log("Sensemaker topic_modelling.ts - Learn factors prompt is being used");
+      // } else if (prompt_learn_metrics) {
+      //   console.log("Sensemaker topic_modelling.ts - Learn metrics prompt is being used");
+      // } else {
+      //   console.log("Sensemaker topic_modelling.ts - No prompt is being used");
+      // }
 
       const finalPrompt = getPrompt(
         instructions,
@@ -142,7 +142,12 @@ export function learnOneLevelOfTopics(
         additionalContext
       );
 
+      // if (prompt_learn_metrics) {
+      //   console.log('METRIC BEING GENERATED')
+      // }
+
       const llmOutput = await model.generateData(finalPrompt, schema);
+      // console.log('llmOutput:')
       return llmOutput as Topic[];
     },
     function (response: Topic[]): boolean {

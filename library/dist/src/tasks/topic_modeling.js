@@ -88,7 +88,7 @@ function learnOneLevelOfTopicsPrompt(
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
       .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    console.log("prompt_learn_metrics", prompt_learn_metrics);
+    // console.log("prompt_learn_metrics", prompt_learn_metrics);
     return prompt_learn_metrics;
   } else if (prompt_learn_themes) {
     prompt_learn_themes = prompt_learn_themes;
@@ -164,22 +164,26 @@ function learnOneLevelOfTopics(
   return (0, sensemaker_utils_1.retryCall)(
     function (model) {
       return __awaiter(this, void 0, void 0, function* () {
-        console.log(
-          `Sensemaker topic_modeling.ts - Identifying topics for ${comments.length} statements`
-        );
-        if (prompt_learn_factors) {
-          console.log("Sensemaker topic_modelling.ts - Learn factors prompt is being used");
-        } else if (prompt_learn_metrics) {
-          console.log("Sensemaker topic_modelling.ts - Learn metrics prompt is being used");
-        } else {
-          console.log("Sensemaker topic_modelling.ts - No prompt is being used");
-        }
+        // console.log(
+        //   `Sensemaker topic_modeling.ts - Identifying topics for ${comments.length} statements`
+        // );
+        // if (prompt_learn_factors) {
+        //   console.log("Sensemaker topic_modelling.ts - Learn factors prompt is being used");
+        // } else if (prompt_learn_metrics) {
+        //   console.log("Sensemaker topic_modelling.ts - Learn metrics prompt is being used");
+        // } else {
+        //   console.log("Sensemaker topic_modelling.ts - No prompt is being used");
+        // }
         const finalPrompt = (0, sensemaker_utils_1.getPrompt)(
           instructions,
           comments.map((comment) => comment.text),
           additionalContext
         );
+        // if (prompt_learn_metrics) {
+        //   console.log('METRIC BEING GENERATED')
+        // }
         const llmOutput = yield model.generateData(finalPrompt, schema);
+        // console.log('llmOutput:')
         return llmOutput;
       });
     },

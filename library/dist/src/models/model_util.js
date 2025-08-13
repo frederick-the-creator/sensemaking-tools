@@ -13,12 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DEFAULT_VERTEX_PARALLELISM = exports.RETRY_DELAY_MS = exports.MAX_LLM_RETRIES = exports.MAX_RETRIES = void 0;
+exports.DEFAULT_VERTEX_PARALLELISM =
+  exports.RETRY_DELAY_MS =
+  exports.MAX_LLM_RETRIES =
+  exports.MAX_RETRIES =
+    void 0;
 // Util class for models
 // The maximum number of times a task should be retried.
-exports.MAX_RETRIES = 3;
+exports.MAX_RETRIES = 10;
 // The maximum number of times an LLM call should be retried (it's higher to avoid rate limits).
-exports.MAX_LLM_RETRIES = 9;
+exports.MAX_LLM_RETRIES = 100;
 // How long in milliseconds to wait between API calls.
 exports.RETRY_DELAY_MS = 1000; // 1 seconds
 // Set default vertex parallelism based on similarly named environment variable, or default to 2
