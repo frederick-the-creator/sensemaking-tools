@@ -179,11 +179,12 @@ function learnOneLevelOfTopics(
           comments.map((comment) => comment.text),
           additionalContext
         );
-        // if (prompt_learn_metrics) {
-        //   console.log('METRIC BEING GENERATED')
-        // }
+        if (prompt_learn_metrics) {
+          // console.log('METRIC BEING GENERATED')
+        }
         const llmOutput = yield model.generateData(finalPrompt, schema);
         // console.log('llmOutput:')
+        // console.dir(llmOutput, {depth:null})
         return llmOutput;
       });
     },

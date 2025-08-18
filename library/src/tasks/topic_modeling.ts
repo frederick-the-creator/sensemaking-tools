@@ -142,12 +142,13 @@ export function learnOneLevelOfTopics(
         additionalContext
       );
 
-      // if (prompt_learn_metrics) {
-      //   console.log('METRIC BEING GENERATED')
-      // }
+      if (prompt_learn_metrics) {
+        // console.log('METRIC BEING GENERATED')
+      }
 
       const llmOutput = await model.generateData(finalPrompt, schema);
       // console.log('llmOutput:')
+      // console.dir(llmOutput, {depth:null})
       return llmOutput as Topic[];
     },
     function (response: Topic[]): boolean {

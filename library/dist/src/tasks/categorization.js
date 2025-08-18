@@ -648,6 +648,10 @@ function oneLevelCategorization(
   prompt_categorise_comments
 ) {
   return __awaiter(this, void 0, void 0, function* () {
+    console.log("\nComments for categoriastion:");
+    console.log(comments, { depth: null });
+    console.log("\nAvailable topics for categorisation");
+    console.dir(topics, { depth: null });
     const instructions = topicCategorizationPrompt(topics, prompt_categorise_comments);
     // TODO: Consider the effects of smaller batch sizes. 1 comment per batch was much faster, but
     // the distribution was significantly different from what we're currently seeing. More testing
