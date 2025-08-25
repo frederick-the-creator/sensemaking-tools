@@ -827,7 +827,7 @@ export async function oneLevelCategorization(
   //     {
   //       prompt: [
   //         {
-  //           task: "For each of the following comments, identify the most relevant metric from the list below. Ensure the assigned topic accurately reflects the meaning of the comment. A comment can be assigned to multiple topics if necessary but prefer to assign only one topic. Do not create any new topics that are not listed in the Input Topics. Do not deviate from the exact wording of the Input Topics. NEVER USE '&' in the topic name.",
+  //           task: "You are an expert in socio-economic development, policy evaluation, and data-driven governance. Your task is to suggest metrics that are: Relevant to the given socio-economic factor, Reliable (commonly used, validated, or recognized in research and policy), Locally trackable (can be collected at a city, municipal, or community level using available data sources like surveys, census, administrative records, or NGO datasets). Always provide metrics in a clear list, with a short explanation of why each metric is useful. Avoid abstract concepts that cannot be measured.",
   //           metrics: topics,
   //           comments: comments.map((c) => c.text),
   //         },

@@ -172,8 +172,7 @@ export function learnOneLevelOfTopics(
       //     {
       //       prompt: [
       //         {
-      //           task: "These comments are related to a socio-economic factor and need to be categorized into metrics. Metrics are concrete data points or statistics that you can measure to see the change in that factor. A factor may be tracked by a suite of complementary metrics, each highlighting a distinct facet of the factor. Analyze the following comments and identify relevant metrics within the following factor",
-      //           factor: factor,
+      //           task: "You are an expert in socio-economic development, policy evaluation, and data-driven governance. Your task is to suggest metrics that are: Relevant to the given socio-economic factor, Reliable (commonly used, validated, or recognized in research and policy), Locally trackable - can be collected at a city, municipal, or community level using available data sources. Avoid abstract concepts that cannot be measured. Avoid metrics that require data that would be difficult to obtain. E.g. Perception of safety in public spaces (measured through surveys), Percentage of housing units with adequate natural light, Community satisfaction with space management (measured through surveys), Percentage of population that can correctly identify at least three causes of climate change",                factor: factor,
       //           comments: comments.map((c) => c.text),
       //         },
       //       ],

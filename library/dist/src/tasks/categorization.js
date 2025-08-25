@@ -56,6 +56,8 @@ const sensemaker_utils_1 = require("../sensemaker_utils");
 const typebox_1 = require("@sinclair/typebox");
 const topic_modeling_1 = require("./topic_modeling");
 const model_util_1 = require("../models/model_util");
+// import fs from "fs";
+// import path from "path";
 /**
  * @fileoverview Helper functions for performing comments categorization.
  */
@@ -83,12 +85,12 @@ function categorizeWithRetry(
         id: comment.id,
         topics: flatAvailableTopics,
       }));
-      console.log("input comments:");
-      console.dir(inputComments, { depth: null });
-      console.log("topics");
-      console.dir(topics, { depth: null });
-      console.log("categorized object");
-      console.dir(categorized, { depth: null });
+      // console.log('input comments:')
+      // console.dir(inputComments, {depth:null})
+      // console.log('topics')
+      // console.dir(topics, {depth:null})
+      // console.log('categorized object')
+      // console.dir(categorized, {depth:null})
       return categorized;
     }
     // Old LLM-based logic
@@ -117,12 +119,12 @@ function categorizeWithRetry(
       );
       categorized = categorized.concat(newProcessedComments.commentRecords);
       uncategorized = newProcessedComments.uncategorizedComments;
-      console.log("input comments:");
-      console.dir(inputComments, { depth: null });
-      console.log("topics");
-      console.dir(topics, { depth: null });
-      console.log("categorized object");
-      console.dir(categorized, { depth: null });
+      // console.log('input comments:')
+      // console.dir(inputComments, {depth:null})
+      // console.log('topics')
+      // console.dir(topics, {depth:null})
+      // console.log('categorized object')
+      // console.dir(categorized, {depth:null})
       if (uncategorized.length === 0) {
         console.log("All comments categorised successfully");
         break; // All comments categorized successfully
@@ -779,7 +781,7 @@ function oneLevelCategorization(
     //     {
     //       prompt: [
     //         {
-    //           task: "For each of the following comments, identify the most relevant metric from the list below. Ensure the assigned topic accurately reflects the meaning of the comment. A comment can be assigned to multiple topics if necessary but prefer to assign only one topic. Do not create any new topics that are not listed in the Input Topics. Do not deviate from the exact wording of the Input Topics. NEVER USE '&' in the topic name.",
+    //           task: "You are an expert in socio-economic development, policy evaluation, and data-driven governance. Your task is to suggest metrics that are: Relevant to the given socio-economic factor, Reliable (commonly used, validated, or recognized in research and policy), Locally trackable (can be collected at a city, municipal, or community level using available data sources like surveys, census, administrative records, or NGO datasets). Always provide metrics in a clear list, with a short explanation of why each metric is useful. Avoid abstract concepts that cannot be measured.",
     //           metrics: topics,
     //           comments: comments.map((c) => c.text),
     //         },
