@@ -18,6 +18,8 @@ import { executeConcurrently, getPrompt, hydrateCommentRecord } from "../sensema
 import { TSchema, Type } from "@sinclair/typebox";
 import { learnOneLevelOfTopics } from "./topic_modeling";
 import { MAX_RETRIES, RETRY_DELAY_MS } from "../models/model_util";
+import fs from "fs";
+import path from "path";
 
 /**
  * @fileoverview Helper functions for performing comments categorization.
@@ -725,5 +727,40 @@ export async function oneLevelCategorization(
   CategorizedBatches.forEach((batch) => categorized.push(...batch));
 
   const categorizedComments = hydrateCommentRecord(categorized, comments);
+
+  // Persist run data for inspection
+  try {
+    // When running from dist, write to apps/backend/evals/runs/topic_modelling_runs
+    // __dirname is expected to be .../apps/backend/sensemaking-tools/library/dist/src/tasks
+    const runsDir = path.join(__dirname, "../../../../../evals/runs/categorization_runs_overwrite");
+    fs.mkdirSync(runsDir, { recursive: true });
+
+    // Determine next numeric file id
+    const files = fs.readdirSync(runsDir);
+    const numericIds = files
+      .map((name) => (name.match(/^(\d+)\.json$/)?.[1] ? Number(RegExp.$1) : null))
+      .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
+    const nextId = (numericIds.length ? Math.max(...numericIds) : 0) + 1;
+    const outPath = path.join(runsDir, `${nextId}.json`);
+
+    const fileContent = [
+      {
+        prompt: [
+          {
+            task: "For each of the following comments, identify the most relevant metric from the list below. Ensure the assigned topic accurately reflects the meaning of the comment. A comment can be assigned to multiple topics if necessary but prefer to assign only one topic. Do not create any new topics that are not listed in the Input Topics. Do not deviate from the exact wording of the Input Topics. NEVER USE '&' in the topic name.",
+            metrics: topics,
+            comments: comments.map((c) => c.text),
+          },
+        ],
+        response: categorizedComments,
+      },
+    ];
+
+    fs.writeFileSync(outPath, JSON.stringify(fileContent, null, 2), "utf-8");
+  } catch (e) {
+    // Best-effort; do not interrupt the main flow
+    console.warn("Failed to write topic_modelling_runs file:", e);
+  }
+
   return categorizedComments;
 }

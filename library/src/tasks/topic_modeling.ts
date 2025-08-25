@@ -17,6 +17,8 @@ import { Model } from "../models/model";
 import { MAX_RETRIES } from "../models/model_util";
 import { getPrompt, retryCall } from "../sensemaker_utils";
 import { Comment, FlatTopic, NestedTopic, Topic } from "../types";
+import fs from "fs";
+import path from "path";
 
 /**
  * @fileoverview Helper functions for performing topic modeling on sets of comments.
@@ -147,6 +149,43 @@ export function learnOneLevelOfTopics(
       }
 
       const llmOutput = await model.generateData(finalPrompt, schema);
+
+      // Persist run data for inspection
+      try {
+        // When running from dist, write to apps/backend/evals/runs/topic_modelling_runs
+        // __dirname is expected to be .../apps/backend/sensemaking-tools/library/dist/src/tasks
+        const runsDir = path.join(
+          __dirname,
+          "../../../../../evals/runs/topic_modelling_runs_overwrite"
+        );
+        fs.mkdirSync(runsDir, { recursive: true });
+
+        // Determine next numeric file id
+        const files = fs.readdirSync(runsDir);
+        const numericIds = files
+          .map((name) => (name.match(/^(\d+)\.json$/)?.[1] ? Number(RegExp.$1) : null))
+          .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
+        const nextId = (numericIds.length ? Math.max(...numericIds) : 0) + 1;
+        const outPath = path.join(runsDir, `${nextId}.json`);
+
+        const fileContent = [
+          {
+            prompt: [
+              {
+                task: "These comments are related to a socio-economic factor and need to be categorized into metrics. Metrics are concrete data points or statistics that you can measure to see the change in that factor. A factor may be tracked by a suite of complementary metrics, each highlighting a distinct facet of the factor. Analyze the following comments and identify relevant metrics within the following factor",
+                factor: factor,
+                comments: comments.map((c) => c.text),
+              },
+            ],
+            response: llmOutput,
+          },
+        ];
+
+        fs.writeFileSync(outPath, JSON.stringify(fileContent, null, 2), "utf-8");
+      } catch (e) {
+        // Best-effort; do not interrupt the main flow
+        console.warn("Failed to write topic_modelling_runs file:", e);
+      }
       // console.log('llmOutput:')
       // console.dir(llmOutput, {depth:null})
       return llmOutput as Topic[];

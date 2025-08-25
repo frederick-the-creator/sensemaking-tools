@@ -43,6 +43,11 @@ var __awaiter =
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LEARN_TOPICS_PROMPT = void 0;
 exports.learnOneLevelOfTopicsPrompt = learnOneLevelOfTopicsPrompt;
@@ -53,6 +58,8 @@ const typebox_1 = require("@sinclair/typebox");
 const model_util_1 = require("../models/model_util");
 const sensemaker_utils_1 = require("../sensemaker_utils");
 const types_1 = require("../types");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 /**
  * @fileoverview Helper functions for performing topic modeling on sets of comments.
  */
@@ -183,6 +190,44 @@ function learnOneLevelOfTopics(
           // console.log('METRIC BEING GENERATED')
         }
         const llmOutput = yield model.generateData(finalPrompt, schema);
+        // Persist run data for inspection
+        try {
+          // When running from dist, write to apps/backend/evals/runs/topic_modelling_runs
+          // __dirname is expected to be .../apps/backend/sensemaking-tools/library/dist/src/tasks
+          const runsDir = path_1.default.join(
+            __dirname,
+            "../../../../../evals/runs/topic_modelling_runs_overwrite"
+          );
+          fs_1.default.mkdirSync(runsDir, { recursive: true });
+          // Determine next numeric file id
+          const files = fs_1.default.readdirSync(runsDir);
+          const numericIds = files
+            .map((name) => {
+              var _a;
+              return ((_a = name.match(/^(\d+)\.json$/)) === null || _a === void 0 ? void 0 : _a[1])
+                ? Number(RegExp.$1)
+                : null;
+            })
+            .filter((n) => typeof n === "number" && Number.isFinite(n));
+          const nextId = (numericIds.length ? Math.max(...numericIds) : 0) + 1;
+          const outPath = path_1.default.join(runsDir, `${nextId}.json`);
+          const fileContent = [
+            {
+              prompt: [
+                {
+                  task: "These comments are related to a socio-economic factor and need to be categorized into metrics. Metrics are concrete data points or statistics that you can measure to see the change in that factor. A factor may be tracked by a suite of complementary metrics, each highlighting a distinct facet of the factor. Analyze the following comments and identify relevant metrics within the following factor",
+                  factor: factor,
+                  comments: comments.map((c) => c.text),
+                },
+              ],
+              response: llmOutput,
+            },
+          ];
+          fs_1.default.writeFileSync(outPath, JSON.stringify(fileContent, null, 2), "utf-8");
+        } catch (e) {
+          // Best-effort; do not interrupt the main flow
+          console.warn("Failed to write topic_modelling_runs file:", e);
+        }
         // console.log('llmOutput:')
         // console.dir(llmOutput, {depth:null})
         return llmOutput;
