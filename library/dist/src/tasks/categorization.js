@@ -95,6 +95,7 @@ function categorizeWithRetry(model, instructions, inputComments, topics, additio
       categorized = categorized.concat(newProcessedComments.commentRecords);
       uncategorized = newProcessedComments.uncategorizedComments;
       if (uncategorized.length === 0) {
+        console.log("All comments categorised successfully");
         break; // All comments categorized successfully
       }
       if (attempts < model_util_1.MAX_RETRIES) {
@@ -103,6 +104,7 @@ function categorizeWithRetry(model, instructions, inputComments, topics, additio
         );
         yield new Promise((resolve) => setTimeout(resolve, model_util_1.RETRY_DELAY_MS));
       } else {
+        console.log("Failed to categorize, trigger default assignment");
         categorized = categorized.concat(assignDefaultCategory(uncategorized));
       }
     }
@@ -312,6 +314,9 @@ function assignDefaultCategory(uncategorized) {
     `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
   );
   console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
+  console.log("Uncategorised comments assigning to other:");
+  console.log(uncategorized);
+  console.dir(uncategorized, { depth: null });
   return uncategorized.map((comment) => {
     return Object.assign(Object.assign({}, comment), { topics: [{ name: "Other" }] });
   });
@@ -648,10 +653,10 @@ function oneLevelCategorization(
   prompt_categorise_comments
 ) {
   return __awaiter(this, void 0, void 0, function* () {
-    console.log("\nComments for categoriastion:");
-    console.log(comments, { depth: null });
-    console.log("\nAvailable topics for categorisation");
-    console.dir(topics, { depth: null });
+    // console.log("\nComments for categoriastion:");
+    // console.log(comments, { depth: null });
+    // console.log("\nAvailable topics for categorisation");
+    // console.dir(topics, { depth: null });
     const instructions = topicCategorizationPrompt(topics, prompt_categorise_comments);
     // TODO: Consider the effects of smaller batch sizes. 1 comment per batch was much faster, but
     // the distribution was significantly different from what we're currently seeing. More testing
