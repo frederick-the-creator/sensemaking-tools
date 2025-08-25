@@ -183,7 +183,8 @@ class Sensemaker {
     prompt_categorise_comments,
     prompt_learn_factors,
     prompt_learn_metrics,
-    prompt_learn_themes
+    prompt_learn_themes,
+    metricCategorizationFlag
   ) {
     return __awaiter(this, void 0, void 0, function* () {
       // const startTime = performance.now();
@@ -204,7 +205,8 @@ class Sensemaker {
         prompt_categorise_comments,
         prompt_learn_factors,
         prompt_learn_metrics,
-        prompt_learn_themes
+        prompt_learn_themes,
+        metricCategorizationFlag
       );
       // console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);
       return categorizedComments;

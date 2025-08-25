@@ -18,8 +18,8 @@ import { executeConcurrently, getPrompt, hydrateCommentRecord } from "../sensema
 import { TSchema, Type } from "@sinclair/typebox";
 import { learnOneLevelOfTopics } from "./topic_modeling";
 import { MAX_RETRIES, RETRY_DELAY_MS } from "../models/model_util";
-import fs from "fs";
-import path from "path";
+// import fs from "fs";
+// import path from "path";
 
 /**
  * @fileoverview Helper functions for performing comments categorization.
@@ -38,8 +38,29 @@ export async function categorizeWithRetry(
   instructions: string,
   inputComments: Comment[],
   topics: Topic[],
-  additionalContext?: string
+  additionalContext?: string,
+  metricCategorizationFlag?: boolean
 ): Promise<CommentRecord[]> {
+  if (metricCategorizationFlag) {
+    // Map each input comment to all available topics (flat by name)
+    const flatAvailableTopics: FlatTopic[] = topics.map((t) => ({ name: t.name }) as FlatTopic);
+
+    const categorized: CommentRecord[] = inputComments.map((comment) => ({
+      id: comment.id,
+      topics: flatAvailableTopics,
+    }));
+
+    // console.log('input comments:')
+    // console.dir(inputComments, {depth:null})
+    // console.log('topics')
+    // console.dir(topics, {depth:null})
+    // console.log('categorized object')
+    // console.dir(categorized, {depth:null})
+
+    return categorized;
+  }
+
+  // Old LLM-based logic
   // a holder for uncategorized comments: first - input comments, later - any failed ones that need to be retried
   let uncategorized: Comment[] = [...inputComments];
   let categorized: CommentRecord[] = [];
@@ -63,6 +84,13 @@ export async function categorizeWithRetry(
     );
     categorized = categorized.concat(newProcessedComments.commentRecords);
     uncategorized = newProcessedComments.uncategorizedComments;
+
+    // console.log('input comments:')
+    // console.dir(inputComments, {depth:null})
+    // console.log('topics')
+    // console.dir(topics, {depth:null})
+    // console.log('categorized object')
+    // console.dir(categorized, {depth:null})
 
     if (uncategorized.length === 0) {
       console.log("All comments categorised successfully");
@@ -570,7 +598,8 @@ export async function categorizeCommentsRecursive(
   prompt_categorise_comments?: string,
   prompt_learn_factors?: string,
   prompt_learn_metrics?: string,
-  prompt_learn_themes?: string
+  prompt_learn_themes?: string,
+  metricCategorizationFlag?: boolean
 ): Promise<Comment[]> {
   const currentTopicDepth = getTopicDepth(comments);
 
@@ -621,13 +650,27 @@ export async function categorizeCommentsRecursive(
       model,
       topicsCategorise,
       additionalContext,
-      prompt_categorise_comments
+      prompt_categorise_comments,
+      metricCategorizationFlag
     );
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
     // This needs included in the list of topics so these are processed downstream.
 
     topics.push({ name: "Other" });
-    return categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext);
+    return categorizeCommentsRecursive(
+      comments,
+      topicDepth,
+      model,
+      topics,
+      additionalContext,
+      theme,
+      factor,
+      prompt_categorise_comments,
+      prompt_learn_factors,
+      prompt_learn_metrics,
+      prompt_learn_themes,
+      metricCategorizationFlag
+    );
   }
 
   if (topics && currentTopicDepth === 0) {
@@ -639,12 +682,26 @@ export async function categorizeCommentsRecursive(
       model,
       topics,
       additionalContext,
-      prompt_categorise_comments
+      prompt_categorise_comments,
+      metricCategorizationFlag
     );
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
     // This needs included in the list of topics so these are processed downstream.
     topics.push({ name: "Other" });
-    return categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext);
+    return categorizeCommentsRecursive(
+      comments,
+      topicDepth,
+      model,
+      topics,
+      additionalContext,
+      theme,
+      factor,
+      prompt_categorise_comments,
+      prompt_learn_factors,
+      prompt_learn_metrics,
+      prompt_learn_themes,
+      metricCategorizationFlag
+    );
   }
 
   let index = 0;
@@ -677,7 +734,9 @@ export async function categorizeCommentsRecursive(
       commentsInTopic,
       model,
       topic.subtopics,
-      additionalContext
+      additionalContext,
+      undefined,
+      metricCategorizationFlag
     );
     comments = mergeCommentTopics(comments, categorizedComments, topic, currentTopicDepth);
     // Sometimes comments are categorized into an "Other" subtopic if no given subtopics are a good fit.
@@ -686,7 +745,20 @@ export async function categorizeCommentsRecursive(
     topicWithNewSubtopics.subtopics.push({ name: "Other" });
     topics = mergeTopics(topics, topicWithNewSubtopics);
   }
-  return categorizeCommentsRecursive(comments, topicDepth, model, topics, additionalContext);
+  return categorizeCommentsRecursive(
+    comments,
+    topicDepth,
+    model,
+    topics,
+    additionalContext,
+    theme,
+    factor,
+    prompt_categorise_comments,
+    prompt_learn_factors,
+    prompt_learn_metrics,
+    prompt_learn_themes,
+    metricCategorizationFlag
+  );
 }
 
 export async function oneLevelCategorization(
@@ -694,7 +766,8 @@ export async function oneLevelCategorization(
   model: Model,
   topics: Topic[],
   additionalContext?: string,
-  prompt_categorise_comments?: string
+  prompt_categorise_comments?: string,
+  metricCategorizationFlag?: boolean
 ): Promise<Comment[]> {
   // console.log("\nComments for categoriastion:");
   // console.log(comments, { depth: null });
@@ -711,7 +784,14 @@ export async function oneLevelCategorization(
 
     // Create a callback function for each batch and add it to the list, preparing them for parallel execution.
     batchesToCategorize.push(() =>
-      categorizeWithRetry(model, instructions, uncategorizedBatch, topics, additionalContext)
+      categorizeWithRetry(
+        model,
+        instructions,
+        uncategorizedBatch,
+        topics,
+        additionalContext,
+        metricCategorizationFlag
+      )
     );
   }
 
@@ -729,38 +809,38 @@ export async function oneLevelCategorization(
   const categorizedComments = hydrateCommentRecord(categorized, comments);
 
   // Persist run data for inspection
-  try {
-    // When running from dist, write to apps/backend/evals/runs/topic_modelling_runs
-    // __dirname is expected to be .../apps/backend/sensemaking-tools/library/dist/src/tasks
-    const runsDir = path.join(__dirname, "../../../../../evals/runs/categorization_runs_overwrite");
-    fs.mkdirSync(runsDir, { recursive: true });
+  // try {
+  //   // When running from dist, write to apps/backend/evals/runs/topic_modelling_runs
+  //   // __dirname is expected to be .../apps/backend/sensemaking-tools/library/dist/src/tasks
+  //   const runsDir = path.join(__dirname, "../../../../../evals/runs/categorization_runs_overwrite");
+  //   fs.mkdirSync(runsDir, { recursive: true });
 
-    // Determine next numeric file id
-    const files = fs.readdirSync(runsDir);
-    const numericIds = files
-      .map((name) => (name.match(/^(\d+)\.json$/)?.[1] ? Number(RegExp.$1) : null))
-      .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
-    const nextId = (numericIds.length ? Math.max(...numericIds) : 0) + 1;
-    const outPath = path.join(runsDir, `${nextId}.json`);
+  //   // Determine next numeric file id
+  //   const files = fs.readdirSync(runsDir);
+  //   const numericIds = files
+  //     .map((name) => (name.match(/^(\d+)\.json$/)?.[1] ? Number(RegExp.$1) : null))
+  //     .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
+  //   const nextId = (numericIds.length ? Math.max(...numericIds) : 0) + 1;
+  //   const outPath = path.join(runsDir, `${nextId}.json`);
 
-    const fileContent = [
-      {
-        prompt: [
-          {
-            task: "For each of the following comments, identify the most relevant metric from the list below. Ensure the assigned topic accurately reflects the meaning of the comment. A comment can be assigned to multiple topics if necessary but prefer to assign only one topic. Do not create any new topics that are not listed in the Input Topics. Do not deviate from the exact wording of the Input Topics. NEVER USE '&' in the topic name.",
-            metrics: topics,
-            comments: comments.map((c) => c.text),
-          },
-        ],
-        response: categorizedComments,
-      },
-    ];
+  //   const fileContent = [
+  //     {
+  //       prompt: [
+  //         {
+  //           task: "For each of the following comments, identify the most relevant metric from the list below. Ensure the assigned topic accurately reflects the meaning of the comment. A comment can be assigned to multiple topics if necessary but prefer to assign only one topic. Do not create any new topics that are not listed in the Input Topics. Do not deviate from the exact wording of the Input Topics. NEVER USE '&' in the topic name.",
+  //           metrics: topics,
+  //           comments: comments.map((c) => c.text),
+  //         },
+  //       ],
+  //       response: categorizedComments,
+  //     },
+  //   ];
 
-    fs.writeFileSync(outPath, JSON.stringify(fileContent, null, 2), "utf-8");
-  } catch (e) {
-    // Best-effort; do not interrupt the main flow
-    console.warn("Failed to write topic_modelling_runs file:", e);
-  }
+  //   fs.writeFileSync(outPath, JSON.stringify(fileContent, null, 2), "utf-8");
+  // } catch (e) {
+  //   // Best-effort; do not interrupt the main flow
+  //   console.warn("Failed to write topic_modelling_runs file:", e);
+  // }
 
   return categorizedComments;
 }
