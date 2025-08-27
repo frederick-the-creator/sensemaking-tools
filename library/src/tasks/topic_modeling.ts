@@ -38,23 +38,24 @@ export function learnOneLevelOfTopicsPrompt(
   otherTopics?: Topic[],
   prompt_learn_factors?: string,
   prompt_learn_metrics?: string,
-  prompt_learn_themes?: string
+  prompt_learn_themes?: string,
+  communityLocation?: string
 ): string {
   const otherTopicNames = otherTopics?.map((topic) => topic.name).join(", ") ?? "";
 
   if (prompt_learn_factors) {
     prompt_learn_factors = prompt_learn_factors
       .replace(/{{parentTopicName}}/g, parentTopic.name)
-      .replace(/{{otherTopicNames}}/g, otherTopicNames);
+      .replace(/{{otherTopicNames}}/g, otherTopicNames)
+      .replace(/{{communityLocation}}/g, communityLocation ?? "");
     return prompt_learn_factors;
   } else if (prompt_learn_metrics) {
     prompt_learn_metrics = prompt_learn_metrics
       .replace(/{{parentTopicName}}/g, parentTopic.name)
-      .replace(/{{otherTopicNames}}/g, otherTopicNames);
-    // console.log("prompt_learn_metrics", prompt_learn_metrics);
+      .replace(/{{otherTopicNames}}/g, otherTopicNames)
+      .replace(/{{communityLocation}}/g, communityLocation ?? "");
     return prompt_learn_metrics;
   } else if (prompt_learn_themes) {
-    prompt_learn_themes = prompt_learn_themes;
     return prompt_learn_themes;
   } else {
     return "No prompt provided";
@@ -76,14 +77,35 @@ export function generateTopicModelingPrompt(
   factor?: string,
   prompt_learn_factors?: string,
   prompt_learn_metrics?: string,
-  prompt_learn_themes?: string
+  prompt_learn_themes?: string,
+  communityLocation?: string
 ): string {
   if (theme) {
-    return learnOneLevelOfTopicsPrompt({ name: theme }, otherTopics, prompt_learn_factors);
+    return learnOneLevelOfTopicsPrompt(
+      { name: theme },
+      otherTopics,
+      prompt_learn_factors,
+      undefined,
+      undefined,
+      communityLocation
+    );
   } else if (factor) {
-    return learnOneLevelOfTopicsPrompt({ name: factor }, otherTopics, prompt_learn_metrics);
+    return learnOneLevelOfTopicsPrompt(
+      { name: factor },
+      otherTopics,
+      undefined,
+      prompt_learn_metrics,
+      undefined,
+      communityLocation
+    );
   } else if (prompt_learn_themes) {
-    return learnOneLevelOfTopicsPrompt({ name: "NA" }, otherTopics, prompt_learn_themes);
+    return learnOneLevelOfTopicsPrompt(
+      { name: "NA" },
+      otherTopics,
+      undefined,
+      undefined,
+      prompt_learn_themes
+    );
   } else {
     return LEARN_TOPICS_PROMPT;
   }
@@ -111,7 +133,8 @@ export function learnOneLevelOfTopics(
   factor?: string,
   prompt_learn_factors?: string,
   prompt_learn_metrics?: string,
-  prompt_learn_themes?: string
+  prompt_learn_themes?: string,
+  communityLocation?: string
 ): Promise<Topic[]> {
   const instructions = generateTopicModelingPrompt(
     topic,
@@ -120,7 +143,8 @@ export function learnOneLevelOfTopics(
     factor,
     prompt_learn_factors,
     prompt_learn_metrics,
-    prompt_learn_themes
+    prompt_learn_themes,
+    communityLocation
   );
   const schema = theme || factor ? Type.Array(NestedTopic) : Type.Array(FlatTopic);
 

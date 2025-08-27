@@ -96,6 +96,7 @@ export declare class Sensemaker {
     prompt_learn_factors?: string,
     prompt_learn_metrics?: string,
     prompt_learn_themes?: string,
-    metricCategorizationFlag?: boolean
+    metricCategorizationFlag?: boolean,
+    communityLocation?: string
   ): Promise<Comment[]>;
 }

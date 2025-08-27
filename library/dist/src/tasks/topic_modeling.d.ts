@@ -3,8 +3,16 @@ import { Comment, Topic } from "../types";
 /**
  * @fileoverview Helper functions for performing topic modeling on sets of comments.
  */
-export declare const LEARN_TOPICS_PROMPT = "\nAnalyze the following comments and identify common topics.\nConsider the granularity of topics: too few topics may oversimplify the content and miss important nuances, while too many topics may lead to redundancy and make the overall structure less clear.\nAim for a balanced number of topics that effectively summarizes the key themes without excessive detail.\nAfter analysis of the comments, determine the optimal number of topics to represent the content effectively.\nJustify why having fewer topics would be less optimal (potentially oversimplifying and missing key nuances), and why having more topics would also be less optimal (potentially leading to redundancy and a less clear overall structure).\nAfter determining the optimal number of topics, identify those topics.\n";
-export declare function learnOneLevelOfTopicsPrompt(parentTopic: Topic, otherTopics?: Topic[], prompt_learn_factors?: string, prompt_learn_metrics?: string, prompt_learn_themes?: string): string;
+export declare const LEARN_TOPICS_PROMPT =
+  "\nAnalyze the following comments and identify common topics.\nConsider the granularity of topics: too few topics may oversimplify the content and miss important nuances, while too many topics may lead to redundancy and make the overall structure less clear.\nAim for a balanced number of topics that effectively summarizes the key themes without excessive detail.\nAfter analysis of the comments, determine the optimal number of topics to represent the content effectively.\nJustify why having fewer topics would be less optimal (potentially oversimplifying and missing key nuances), and why having more topics would also be less optimal (potentially leading to redundancy and a less clear overall structure).\nAfter determining the optimal number of topics, identify those topics.\n";
+export declare function learnOneLevelOfTopicsPrompt(
+  parentTopic: Topic,
+  otherTopics?: Topic[],
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string,
+  prompt_learn_themes?: string,
+  communityLocation?: string
+): string;
 /**
  * Generates an LLM prompt for topic modeling of a set of comments.
  *
@@ -13,7 +21,16 @@ export declare function learnOneLevelOfTopicsPrompt(parentTopic: Topic, otherTop
  * @param factor - Optional factor string to include in the prompt.
  * @returns The generated prompt string.
  */
-export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTopics?: Topic[], theme?: string, factor?: string, prompt_learn_factors?: string, prompt_learn_metrics?: string, prompt_learn_themes?: string): string;
+export declare function generateTopicModelingPrompt(
+  parentTopic?: Topic,
+  otherTopics?: Topic[],
+  theme?: string,
+  factor?: string,
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string,
+  prompt_learn_themes?: string,
+  communityLocation?: string
+): string;
 /**
  * Learn either topics or subtopics from the given comments.
  * @param comments the comments to consider
@@ -26,7 +43,19 @@ export declare function generateTopicModelingPrompt(parentTopic?: Topic, otherTo
  * @param factor optional factor string to include in the prompt
  * @returns the topics that are present in the comments.
  */
-export declare function learnOneLevelOfTopics(comments: Comment[], model: Model, topic?: Topic, otherTopics?: Topic[], additionalContext?: string, theme?: string, factor?: string, prompt_learn_factors?: string, prompt_learn_metrics?: string, prompt_learn_themes?: string): Promise<Topic[]>;
+export declare function learnOneLevelOfTopics(
+  comments: Comment[],
+  model: Model,
+  topic?: Topic,
+  otherTopics?: Topic[],
+  additionalContext?: string,
+  theme?: string,
+  factor?: string,
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string,
+  prompt_learn_themes?: string,
+  communityLocation?: string
+): Promise<Topic[]>;
 /**
  * Validates the topic modeling response from the LLM.
  *

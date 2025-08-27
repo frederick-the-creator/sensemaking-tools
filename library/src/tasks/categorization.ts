@@ -599,7 +599,8 @@ export async function categorizeCommentsRecursive(
   prompt_learn_factors?: string,
   prompt_learn_metrics?: string,
   prompt_learn_themes?: string,
-  metricCategorizationFlag?: boolean
+  metricCategorizationFlag?: boolean,
+  communityLocation?: string
 ): Promise<Comment[]> {
   const currentTopicDepth = getTopicDepth(comments);
 
@@ -630,7 +631,8 @@ export async function categorizeCommentsRecursive(
       factor,
       prompt_learn_factors,
       prompt_learn_metrics,
-      prompt_learn_themes
+      prompt_learn_themes,
+      communityLocation
     );
 
     // console.log("Sensemaker categorization.ts - Topics learnt: ");
@@ -669,7 +671,8 @@ export async function categorizeCommentsRecursive(
       prompt_learn_factors,
       prompt_learn_metrics,
       prompt_learn_themes,
-      metricCategorizationFlag
+      metricCategorizationFlag,
+      communityLocation
     );
   }
 
@@ -700,7 +703,8 @@ export async function categorizeCommentsRecursive(
       prompt_learn_factors,
       prompt_learn_metrics,
       prompt_learn_themes,
-      metricCategorizationFlag
+      metricCategorizationFlag,
+      communityLocation
     );
   }
 
@@ -757,7 +761,8 @@ export async function categorizeCommentsRecursive(
     prompt_learn_factors,
     prompt_learn_metrics,
     prompt_learn_themes,
-    metricCategorizationFlag
+    metricCategorizationFlag,
+    communityLocation
   );
 }
 

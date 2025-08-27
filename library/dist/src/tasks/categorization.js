@@ -563,7 +563,8 @@ function categorizeCommentsRecursive(
   prompt_learn_factors,
   prompt_learn_metrics,
   prompt_learn_themes,
-  metricCategorizationFlag
+  metricCategorizationFlag,
+  communityLocation
 ) {
   return __awaiter(this, void 0, void 0, function* () {
     const currentTopicDepth = getTopicDepth(comments);
@@ -592,7 +593,8 @@ function categorizeCommentsRecursive(
         factor,
         prompt_learn_factors,
         prompt_learn_metrics,
-        prompt_learn_themes
+        prompt_learn_themes,
+        communityLocation
       );
       // console.log("Sensemaker categorization.ts - Topics learnt: ");
       // console.dir(topics, { depth: null });
@@ -627,7 +629,8 @@ function categorizeCommentsRecursive(
         prompt_learn_factors,
         prompt_learn_metrics,
         prompt_learn_themes,
-        metricCategorizationFlag
+        metricCategorizationFlag,
+        communityLocation
       );
     }
     if (topics && currentTopicDepth === 0) {
@@ -657,7 +660,8 @@ function categorizeCommentsRecursive(
         prompt_learn_factors,
         prompt_learn_metrics,
         prompt_learn_themes,
-        metricCategorizationFlag
+        metricCategorizationFlag,
+        communityLocation
       );
     }
     let index = 0;
@@ -716,7 +720,8 @@ function categorizeCommentsRecursive(
       prompt_learn_factors,
       prompt_learn_metrics,
       prompt_learn_themes,
-      metricCategorizationFlag
+      metricCategorizationFlag,
+      communityLocation
     );
   });
 }

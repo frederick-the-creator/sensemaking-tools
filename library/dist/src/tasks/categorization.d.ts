@@ -83,7 +83,8 @@ export declare function categorizeCommentsRecursive(
   prompt_learn_factors?: string,
   prompt_learn_metrics?: string,
   prompt_learn_themes?: string,
-  metricCategorizationFlag?: boolean
+  metricCategorizationFlag?: boolean,
+  communityLocation?: string
 ): Promise<Comment[]>;
 export declare function oneLevelCategorization(
   comments: Comment[],
