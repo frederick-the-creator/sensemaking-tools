@@ -357,10 +357,6 @@ function assignDefaultCategory(uncategorized: Comment[]): CommentRecord[] {
   );
   console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
 
-  console.log("Uncategorised comments assigning to other:");
-  console.log(uncategorized);
-  console.dir(uncategorized, { depth: null });
-
   return uncategorized.map((comment: Comment): CommentRecord => {
     return {
       ...comment,

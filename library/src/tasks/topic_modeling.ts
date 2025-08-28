@@ -154,15 +154,9 @@ export function learnOneLevelOfTopics(
       //   console.log("Sensemaker topic_modelling.ts - No prompt is being used");
       // }
 
-      const finalPrompt = getPrompt(
-        instructions,
-        comments.map((comment) => comment.text),
-        additionalContext
-      );
+      const promptData = prompt_learn_metrics ? [] : comments.map((comment) => comment.text);
 
-      if (prompt_learn_metrics) {
-        // console.log('METRIC BEING GENERATED')
-      }
+      const finalPrompt = getPrompt(instructions, promptData, additionalContext);
 
       const llmOutput = await model.generateData(finalPrompt, schema);
 

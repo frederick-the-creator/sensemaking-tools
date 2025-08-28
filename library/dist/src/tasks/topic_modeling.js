@@ -192,14 +192,12 @@ function learnOneLevelOfTopics(
         // } else {
         //   console.log("Sensemaker topic_modelling.ts - No prompt is being used");
         // }
+        const promptData = prompt_learn_metrics ? [] : comments.map((comment) => comment.text);
         const finalPrompt = (0, sensemaker_utils_1.getPrompt)(
           instructions,
-          comments.map((comment) => comment.text),
+          promptData,
           additionalContext
         );
-        if (prompt_learn_metrics) {
-          // console.log('METRIC BEING GENERATED')
-        }
         const llmOutput = yield model.generateData(finalPrompt, schema);
         // Persist run data for inspection
         // try {

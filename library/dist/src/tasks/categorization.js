@@ -345,9 +345,6 @@ function assignDefaultCategory(uncategorized) {
     `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
   );
   console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
-  console.log("Uncategorised comments assigning to other:");
-  console.log(uncategorized);
-  console.dir(uncategorized, { depth: null });
   return uncategorized.map((comment) => {
     return Object.assign(Object.assign({}, comment), { topics: [{ name: "Other" }] });
   });
