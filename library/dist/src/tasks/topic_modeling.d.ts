@@ -8,10 +8,9 @@ export declare const LEARN_TOPICS_PROMPT =
 export declare function learnOneLevelOfTopicsPrompt(
   parentTopic: Topic,
   otherTopics?: Topic[],
-  prompt_learn_factors?: string,
-  prompt_learn_metrics?: string,
   prompt_learn_themes?: string,
-  communityLocation?: string
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string
 ): string;
 /**
  * Generates an LLM prompt for topic modeling of a set of comments.
@@ -26,10 +25,9 @@ export declare function generateTopicModelingPrompt(
   otherTopics?: Topic[],
   theme?: string,
   factor?: string,
-  prompt_learn_factors?: string,
-  prompt_learn_metrics?: string,
   prompt_learn_themes?: string,
-  communityLocation?: string
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string
 ): string;
 /**
  * Learn either topics or subtopics from the given comments.
@@ -51,10 +49,9 @@ export declare function learnOneLevelOfTopics(
   additionalContext?: string,
   theme?: string,
   factor?: string,
-  prompt_learn_factors?: string,
-  prompt_learn_metrics?: string,
   prompt_learn_themes?: string,
-  communityLocation?: string
+  prompt_learn_factors?: string,
+  prompt_learn_metrics?: string
 ): Promise<Topic[]>;
 /**
  * Validates the topic modeling response from the LLM.

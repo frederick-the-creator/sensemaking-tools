@@ -595,12 +595,13 @@ export async function categorizeCommentsRecursive(
   additionalContext?: string,
   theme?: string,
   factor?: string,
-  prompt_categorise_comments?: string,
+  prompt_learn_themes?: string,
   prompt_learn_factors?: string,
   prompt_learn_metrics?: string,
-  prompt_learn_themes?: string,
-  metricCategorizationFlag?: boolean,
-  communityLocation?: string
+  prompt_categorise_comments_themes?: string,
+  prompt_categorise_comments_factors?: string,
+  prompt_categorise_comments_metrics?: string,
+  metricCategorizationFlag?: boolean
 ): Promise<Comment[]> {
   const currentTopicDepth = getTopicDepth(comments);
 
@@ -629,10 +630,9 @@ export async function categorizeCommentsRecursive(
       additionalContext,
       theme,
       factor,
-      prompt_learn_factors,
-      prompt_learn_metrics,
       prompt_learn_themes,
-      communityLocation
+      prompt_learn_factors,
+      prompt_learn_metrics
     );
 
     // console.log("Sensemaker categorization.ts - Topics learnt: ");
@@ -652,7 +652,11 @@ export async function categorizeCommentsRecursive(
       model,
       topicsCategorise,
       additionalContext,
-      prompt_categorise_comments,
+      theme,
+      factor,
+      prompt_categorise_comments_themes,
+      prompt_categorise_comments_factors,
+      prompt_categorise_comments_metrics,
       metricCategorizationFlag
     );
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
@@ -667,12 +671,13 @@ export async function categorizeCommentsRecursive(
       additionalContext,
       theme,
       factor,
-      prompt_categorise_comments,
+      prompt_learn_themes,
       prompt_learn_factors,
       prompt_learn_metrics,
-      prompt_learn_themes,
-      metricCategorizationFlag,
-      communityLocation
+      prompt_categorise_comments_themes,
+      prompt_categorise_comments_factors,
+      prompt_categorise_comments_metrics,
+      metricCategorizationFlag
     );
   }
 
@@ -685,7 +690,11 @@ export async function categorizeCommentsRecursive(
       model,
       topics,
       additionalContext,
-      prompt_categorise_comments,
+      theme,
+      factor,
+      prompt_categorise_comments_themes,
+      prompt_categorise_comments_factors,
+      prompt_categorise_comments_metrics,
       metricCategorizationFlag
     );
     // Sometimes comments are categorized into an "Other" topic if no given topics are a good fit.
@@ -699,12 +708,13 @@ export async function categorizeCommentsRecursive(
       additionalContext,
       theme,
       factor,
-      prompt_categorise_comments,
+      prompt_learn_themes,
       prompt_learn_factors,
       prompt_learn_metrics,
-      prompt_learn_themes,
-      metricCategorizationFlag,
-      communityLocation
+      prompt_categorise_comments_themes,
+      prompt_categorise_comments_factors,
+      prompt_categorise_comments_metrics,
+      metricCategorizationFlag
     );
   }
 
@@ -740,6 +750,10 @@ export async function categorizeCommentsRecursive(
       topic.subtopics,
       additionalContext,
       undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
       metricCategorizationFlag
     );
     comments = mergeCommentTopics(comments, categorizedComments, topic, currentTopicDepth);
@@ -757,12 +771,13 @@ export async function categorizeCommentsRecursive(
     additionalContext,
     theme,
     factor,
-    prompt_categorise_comments,
+    prompt_learn_themes,
     prompt_learn_factors,
     prompt_learn_metrics,
-    prompt_learn_themes,
-    metricCategorizationFlag,
-    communityLocation
+    prompt_categorise_comments_themes,
+    prompt_categorise_comments_factors,
+    prompt_categorise_comments_metrics,
+    metricCategorizationFlag
   );
 }
 
@@ -771,15 +786,21 @@ export async function oneLevelCategorization(
   model: Model,
   topics: Topic[],
   additionalContext?: string,
-  prompt_categorise_comments?: string,
+  theme?: string,
+  factor?: string,
+  prompt_categorise_comments_themes?: string,
+  prompt_categorise_comments_factors?: string,
+  prompt_categorise_comments_metrics?: string,
   metricCategorizationFlag?: boolean
 ): Promise<Comment[]> {
-  // console.log("\nComments for categoriastion:");
-  // console.log(comments, { depth: null });
-  // console.log("\nAvailable topics for categorisation");
-  // console.dir(topics, { depth: null });
+  // Choose prompt based on context: when theme -> use factors prompt; when factor -> use metrics prompt; else -> themes prompt
+  const selectedPrompt = theme
+    ? prompt_categorise_comments_factors
+    : factor
+      ? prompt_categorise_comments_metrics
+      : prompt_categorise_comments_themes;
+  const instructions = topicCategorizationPrompt(topics, selectedPrompt);
 
-  const instructions = topicCategorizationPrompt(topics, prompt_categorise_comments);
   // TODO: Consider the effects of smaller batch sizes. 1 comment per batch was much faster, but
   // the distribution was significantly different from what we're currently seeing. More testing
   // is needed to determine the ideal size and distribution.

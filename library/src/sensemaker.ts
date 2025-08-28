@@ -159,12 +159,13 @@ export class Sensemaker {
     topicDepth?: 1 | 2 | 3,
     theme?: string,
     factor?: string,
-    prompt_categorise_comments?: string,
+    prompt_learn_themes?: string,
     prompt_learn_factors?: string,
     prompt_learn_metrics?: string,
-    prompt_learn_themes?: string,
-    metricCategorizationFlag?: boolean,
-    communityLocation?: string
+    prompt_categorise_comments_themes?: string,
+    prompt_categorise_comments_factors?: string,
+    prompt_categorise_comments_metrics?: string,
+    metricCategorizationFlag?: boolean
   ): Promise<Comment[]> {
     // const startTime = performance.now();
     if (!includeSubtopics && topicDepth && topicDepth > 1) {
@@ -183,12 +184,13 @@ export class Sensemaker {
       additionalContext,
       theme,
       factor,
-      prompt_categorise_comments,
+      prompt_learn_themes,
       prompt_learn_factors,
       prompt_learn_metrics,
-      prompt_learn_themes,
-      metricCategorizationFlag,
-      communityLocation
+      prompt_categorise_comments_themes,
+      prompt_categorise_comments_factors,
+      prompt_categorise_comments_metrics,
+      metricCategorizationFlag
     );
 
     // console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);
