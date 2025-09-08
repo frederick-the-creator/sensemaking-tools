@@ -219,12 +219,12 @@ function learnedTopicsValid(response, parentTopic) {
     if (!topicNames.every((name) => allowedTopicNames.includes(name.toLowerCase()))) {
       topicNames.forEach((topicName) => {
         if (!allowedTopicNames.includes(topicName.toLowerCase())) {
-          // console.warn(
-          //   "Invalid response: Found top-level topic not present in the provided topics. Provided topics: ",
-          //   allowedTopicNames,
-          //   " Found topic: ",
-          //   topicName
-          // );
+          console.warn(
+            "Invalid response: Found top-level topic not present in the provided topics. Provided topics: ",
+            allowedTopicNames,
+            " Found topic: ",
+            topicName
+          );
         }
       });
       return false;
@@ -236,9 +236,9 @@ function learnedTopicsValid(response, parentTopic) {
       "subtopics" in topic ? topic.subtopics.map((subtopic) => subtopic.name) : [];
     for (const subtopicName of subtopicNames) {
       if (topicNames.includes(subtopicName) && subtopicName !== "Other") {
-        // console.warn(
-        //   `Invalid response: Subtopic "${subtopicName}" has the same name as a main topic.`
-        // );
+        console.warn(
+          `Invalid response: Subtopic "${subtopicName}" has the same name as a main topic.`
+        );
         return false;
       }
     }

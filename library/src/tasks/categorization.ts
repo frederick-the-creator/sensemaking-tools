@@ -50,13 +50,6 @@ export async function categorizeWithRetry(
       topics: flatAvailableTopics,
     }));
 
-    // console.log('input comments:')
-    // console.dir(inputComments, {depth:null})
-    // console.log('topics')
-    // console.dir(topics, {depth:null})
-    // console.log('categorized object')
-    // console.dir(categorized, {depth:null})
-
     return categorized;
   }
 
@@ -85,25 +78,18 @@ export async function categorizeWithRetry(
     categorized = categorized.concat(newProcessedComments.commentRecords);
     uncategorized = newProcessedComments.uncategorizedComments;
 
-    // console.log('input comments:')
-    // console.dir(inputComments, {depth:null})
-    // console.log('topics')
-    // console.dir(topics, {depth:null})
-    // console.log('categorized object')
-    // console.dir(categorized, {depth:null})
-
     if (uncategorized.length === 0) {
-      // console.log("All comments categorised successfully");
+      console.log("All comments categorised successfully");
       break; // All comments categorized successfully
     }
 
     if (attempts < MAX_RETRIES) {
-      // console.warn(
-      //   `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
-      // );
+      console.warn(
+        `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
+      );
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
     } else {
-      // console.log("Failed to categorize, trigger default assignment");
+      console.log("Failed to categorize, trigger default assignment");
       categorized = categorized.concat(assignDefaultCategory(uncategorized));
     }
   }
@@ -203,7 +189,7 @@ function createTopicLookup(inputTopics: Topic[]): Record<string, string[]> {
  */
 function isExtraComment(comment: Comment | CommentRecord, inputCommentIds: Set<string>): boolean {
   if (!inputCommentIds.has(comment.id)) {
-    // console.warn(`Extra comment in model's response: ${JSON.stringify(comment)}`);
+    console.warn(`Extra comment in model's response: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
@@ -216,7 +202,7 @@ function isExtraComment(comment: Comment | CommentRecord, inputCommentIds: Set<s
  */
 function hasEmptyTopicsOrSubtopics(comment: CommentRecord): boolean {
   if (comment.topics.length === 0) {
-    // console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
+    console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
     return true;
   }
   if (
@@ -224,7 +210,7 @@ function hasEmptyTopicsOrSubtopics(comment: CommentRecord): boolean {
       (topic: Topic) => "subtopics" in topic && (!topic.subtopics || topic.subtopics.length === 0)
     )
   ) {
-    // console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
+    console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
@@ -244,18 +230,18 @@ function hasInvalidTopicNames(
   return comment.topics.some((topic: Topic) => {
     const isValidTopic = topic.name in inputTopics;
     if (!isValidTopic && topic.name !== "Other") {
-      // console.warn(
-      //   `Comment has an invalid topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
-      // );
+      console.warn(
+        `Comment has an invalid topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
+      );
       return true; // Invalid topic found, stop checking and return `hasInvalidTopicNames` true for this comment.
     }
 
     if ("subtopics" in topic) {
       const areAllSubtopicsValid = areSubtopicsValid(topic.subtopics, inputTopics[topic.name]);
       if (!areAllSubtopicsValid) {
-        // console.warn(
-        //   `Comment has invalid subtopics under topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
-        // );
+        console.warn(
+          `Comment has invalid subtopics under topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
+        );
         return true; // Invalid subtopics found, stop checking and return `hasInvalidTopicNames` true for this comment.
       }
     }
@@ -298,7 +284,7 @@ export function findMissingComments(
   );
 
   if (missingComments.length > 0) {
-    // console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
+    console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
   }
   return missingComments;
 }
@@ -352,10 +338,10 @@ function processCategorizedComments(
  * @returns the uncategorized comments now categorized into a "Other" category.
  */
 function assignDefaultCategory(uncategorized: Comment[]): CommentRecord[] {
-  // console.warn(
-  //   `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
-  // );
-  // console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
+  console.warn(
+    `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
+  );
+  console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
 
   return uncategorized.map((comment: Comment): CommentRecord => {
     return {
@@ -702,14 +688,14 @@ export async function categorizeCommentsRecursive(
     );
   }
 
-  // let index = 0;
+  let index = 0;
   const parentTopics = getTopicsAtDepth(topics, currentTopicDepth);
   for (let topic of parentTopics) {
-    // console.log(
-    //   "Categorizing statements into subtopics under: ",
-    //   topic.name,
-    //   ` (${++index}/${parentTopics.length} topics)`
-    // );
+    console.log(
+      "Categorizing statements into subtopics under: ",
+      topic.name,
+      ` (${++index}/${parentTopics.length} topics)`
+    );
     const commentsInTopic = structuredClone(
       getCommentTextsWithTopicsAtDepth(comments, topic.name, currentTopicDepth)
     );
@@ -806,10 +792,10 @@ export async function oneLevelCategorization(
   }
 
   // categorize comment batches, potentially in parallel
-  // const totalBatches = Math.ceil(comments.length / model.categorizationBatchSize);
-  // console.log(
-  //   `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
-  // );
+  const totalBatches = Math.ceil(comments.length / model.categorizationBatchSize);
+  console.log(
+    `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
+  );
   const CategorizedBatches: CommentRecord[][] = await executeConcurrently(batchesToCategorize);
 
   // flatten categorized batches
