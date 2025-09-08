@@ -126,16 +126,16 @@ function categorizeWithRetry(
       // console.log('categorized object')
       // console.dir(categorized, {depth:null})
       if (uncategorized.length === 0) {
-        console.log("All comments categorised successfully");
+        // console.log("All comments categorised successfully");
         break; // All comments categorized successfully
       }
       if (attempts < model_util_1.MAX_RETRIES) {
-        console.warn(
-          `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${model_util_1.RETRY_DELAY_MS / 1000} seconds...`
-        );
+        // console.warn(
+        //   `Expected all ${uncategorizedCommentsForModel.length} comments to be categorized, but ${uncategorized.length} are not categorized properly. Retrying in ${RETRY_DELAY_MS / 1000} seconds...`
+        // );
         yield new Promise((resolve) => setTimeout(resolve, model_util_1.RETRY_DELAY_MS));
       } else {
-        console.log("Failed to categorize, trigger default assignment");
+        // console.log("Failed to categorize, trigger default assignment");
         categorized = categorized.concat(assignDefaultCategory(uncategorized));
       }
     }
@@ -216,7 +216,7 @@ function createTopicLookup(inputTopics) {
  */
 function isExtraComment(comment, inputCommentIds) {
   if (!inputCommentIds.has(comment.id)) {
-    console.warn(`Extra comment in model's response: ${JSON.stringify(comment)}`);
+    // console.warn(`Extra comment in model's response: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
@@ -228,7 +228,7 @@ function isExtraComment(comment, inputCommentIds) {
  */
 function hasEmptyTopicsOrSubtopics(comment) {
   if (comment.topics.length === 0) {
-    console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
+    // console.warn(`Comment with empty topics: ${JSON.stringify(comment)}`);
     return true;
   }
   if (
@@ -236,7 +236,7 @@ function hasEmptyTopicsOrSubtopics(comment) {
       (topic) => "subtopics" in topic && (!topic.subtopics || topic.subtopics.length === 0)
     )
   ) {
-    console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
+    // console.warn(`Comment with empty subtopics: ${JSON.stringify(comment)}`);
     return true;
   }
   return false;
@@ -252,17 +252,17 @@ function hasInvalidTopicNames(comment, inputTopics) {
   return comment.topics.some((topic) => {
     const isValidTopic = topic.name in inputTopics;
     if (!isValidTopic && topic.name !== "Other") {
-      console.warn(
-        `Comment has an invalid topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
-      );
+      // console.warn(
+      //   `Comment has an invalid topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
+      // );
       return true; // Invalid topic found, stop checking and return `hasInvalidTopicNames` true for this comment.
     }
     if ("subtopics" in topic) {
       const areAllSubtopicsValid = areSubtopicsValid(topic.subtopics, inputTopics[topic.name]);
       if (!areAllSubtopicsValid) {
-        console.warn(
-          `Comment has invalid subtopics under topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
-        );
+        // console.warn(
+        //   `Comment has invalid subtopics under topic: ${topic.name}, comment: ${JSON.stringify(comment)}`
+        // );
         return true; // Invalid subtopics found, stop checking and return `hasInvalidTopicNames` true for this comment.
       }
     }
@@ -295,7 +295,7 @@ function findMissingComments(commentRecords, uncategorized) {
     (uncommentRecord) => !commentRecordIds.includes(uncommentRecord.id)
   );
   if (missingComments.length > 0) {
-    console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
+    // console.warn(`Missing comments in model's response: ${JSON.stringify(missingComments)}`);
   }
   return missingComments;
 }
@@ -341,10 +341,10 @@ function processCategorizedComments(commentRecords, inputComments, uncategorized
  * @returns the uncategorized comments now categorized into a "Other" category.
  */
 function assignDefaultCategory(uncategorized) {
-  console.warn(
-    `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
-  );
-  console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
+  // console.warn(
+  //   `Failed to categorize ${uncategorized.length} comments after maximum number of retries. Assigning "Other" topic and "Uncategorized" subtopic to failed comments.`
+  // );
+  // console.warn("Uncategorized comments:", JSON.stringify(uncategorized));
   return uncategorized.map((comment) => {
     return Object.assign(Object.assign({}, comment), { topics: [{ name: "Other" }] });
   });
@@ -567,16 +567,8 @@ function categorizeCommentsRecursive(
   return __awaiter(this, void 0, void 0, function* () {
     const currentTopicDepth = getTopicDepth(comments);
     if (currentTopicDepth >= topicDepth) {
-      // console.log(
-      //   `Sensemaker categorization.ts - Level of topic depth requiured has been achieved in recursive function, so return results:`
-      // );
-      // console.dir(comments, { depth: null });
       return comments;
     }
-    // console.log(
-    //   "Sensemaker categorization.ts - Identifying topics and categorizing statements at depth=",
-    //   currentTopicDepth
-    // );
     if (!topics) {
       // Case where no topics are provided (used for Factor and Metric Analysis, and Thematic Analysis when theme learning is required)
       // If block does both topic learning and categorisation.
@@ -593,8 +585,6 @@ function categorizeCommentsRecursive(
         prompt_learn_factors,
         prompt_learn_metrics
       );
-      // console.log("Sensemaker categorization.ts - Topics learnt: ");
-      // console.dir(topics, { depth: null });
       let topicsCategorise = [];
       if (prompt_learn_themes) {
         topicsCategorise = topics.map((t) => ({ name: t.name }));
@@ -671,14 +661,14 @@ function categorizeCommentsRecursive(
         metricCategorizationFlag
       );
     }
-    let index = 0;
+    // let index = 0;
     const parentTopics = getTopicsAtDepth(topics, currentTopicDepth);
     for (let topic of parentTopics) {
-      console.log(
-        "Categorizing statements into subtopics under: ",
-        topic.name,
-        ` (${++index}/${parentTopics.length} topics)`
-      );
+      // console.log(
+      //   "Categorizing statements into subtopics under: ",
+      //   topic.name,
+      //   ` (${++index}/${parentTopics.length} topics)`
+      // );
       const commentsInTopic = structuredClone(
         getCommentTextsWithTopicsAtDepth(comments, topic.name, currentTopicDepth)
       );
@@ -776,10 +766,10 @@ function oneLevelCategorization(
       );
     }
     // categorize comment batches, potentially in parallel
-    const totalBatches = Math.ceil(comments.length / model.categorizationBatchSize);
-    console.log(
-      `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
-    );
+    // const totalBatches = Math.ceil(comments.length / model.categorizationBatchSize);
+    // console.log(
+    //   `Categorizing ${comments.length} statements in batches (${totalBatches} batches of ${model.categorizationBatchSize} statements)`
+    // );
     const CategorizedBatches = yield (0, sensemaker_utils_1.executeConcurrently)(
       batchesToCategorize
     );
@@ -787,36 +777,6 @@ function oneLevelCategorization(
     const categorized = [];
     CategorizedBatches.forEach((batch) => categorized.push(...batch));
     const categorizedComments = (0, sensemaker_utils_1.hydrateCommentRecord)(categorized, comments);
-    // Persist run data for inspection
-    // try {
-    //   // When running from dist, write to apps/backend/evals/runs/topic_modelling_runs
-    //   // __dirname is expected to be .../apps/backend/sensemaking-tools/library/dist/src/tasks
-    //   const runsDir = path.join(__dirname, "../../../../../evals/runs/categorization_runs_overwrite");
-    //   fs.mkdirSync(runsDir, { recursive: true });
-    //   // Determine next numeric file id
-    //   const files = fs.readdirSync(runsDir);
-    //   const numericIds = files
-    //     .map((name) => (name.match(/^(\d+)\.json$/)?.[1] ? Number(RegExp.$1) : null))
-    //     .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
-    //   const nextId = (numericIds.length ? Math.max(...numericIds) : 0) + 1;
-    //   const outPath = path.join(runsDir, `${nextId}.json`);
-    //   const fileContent = [
-    //     {
-    //       prompt: [
-    //         {
-    //           task: "You are an expert in socio-economic development, policy evaluation, and data-driven governance. Your task is to suggest metrics that are: Relevant to the given socio-economic factor, Reliable (commonly used, validated, or recognized in research and policy), Locally trackable (can be collected at a city, municipal, or community level using available data sources like surveys, census, administrative records, or NGO datasets). Always provide metrics in a clear list, with a short explanation of why each metric is useful. Avoid abstract concepts that cannot be measured.",
-    //           metrics: topics,
-    //           comments: comments.map((c) => c.text),
-    //         },
-    //       ],
-    //       response: categorizedComments,
-    //     },
-    //   ];
-    //   fs.writeFileSync(outPath, JSON.stringify(fileContent, null, 2), "utf-8");
-    // } catch (e) {
-    //   // Best-effort; do not interrupt the main flow
-    //   console.warn("Failed to write topic_modelling_runs file:", e);
-    // }
     return categorizedComments;
   });
 }

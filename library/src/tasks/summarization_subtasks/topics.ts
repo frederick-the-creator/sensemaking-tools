@@ -250,7 +250,7 @@ export class TopicSummary extends RecursiveSummary<SummaryStats> {
           `    </text>\n  </subtopicSummary>`,
         this.additionalContext
       );
-      console.log(`Generating TOPIC SUMMARY for: "${this.topicStat.name}"`);
+      // console.log(`Generating TOPIC SUMMARY for: "${this.topicStat.name}"`);
       subtopicSummaryContents.unshift({
         type: "TopicSummary",
         text: await this.model.generateText(subtopicSummaryPrompt),
@@ -329,7 +329,7 @@ export class TopicSummary extends RecursiveSummary<SummaryStats> {
   async getThemesSummary(): Promise<SummaryContent> {
     const allComments = this.input.comments;
     // TODO: add some edge case handling in case there is only 1 comment, etc
-    console.log(`Generating PROMINENT THEMES for subtopic: "${this.topicStat.name}"`);
+    // console.log(`Generating PROMINENT THEMES for subtopic: "${this.topicStat.name}"`);
     const text = await this.model.generateText(
       getPrompt(
         `Please write a concise bulleted list identifying up to 5 prominent themes across all statements. These statements are all about ${this.topicStat.name}. For each theme, begin with a short theme description written in bold text, followed by a colon, then followed by a SINGLE sentence explaining the theme. Your list should meet the below Criteria and STRICTLY follow the Output Format. Do not preface the bulleted list with any text.

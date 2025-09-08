@@ -182,16 +182,6 @@ function learnOneLevelOfTopics(
   return (0, sensemaker_utils_1.retryCall)(
     function (model) {
       return __awaiter(this, void 0, void 0, function* () {
-        // console.log(
-        //   `Sensemaker topic_modeling.ts - Identifying topics for ${comments.length} statements`
-        // );
-        // if (prompt_learn_factors) {
-        //   console.log("Sensemaker topic_modelling.ts - Learn factors prompt is being used");
-        // } else if (prompt_learn_metrics) {
-        //   console.log("Sensemaker topic_modelling.ts - Learn metrics prompt is being used");
-        // } else {
-        //   console.log("Sensemaker topic_modelling.ts - No prompt is being used");
-        // }
         const promptData = prompt_learn_metrics ? [] : comments.map((comment) => comment.text);
         const finalPrompt = (0, sensemaker_utils_1.getPrompt)(
           instructions,
@@ -199,40 +189,6 @@ function learnOneLevelOfTopics(
           additionalContext
         );
         const llmOutput = yield model.generateData(finalPrompt, schema);
-        // Persist run data for inspection
-        // try {
-        //   // When running from dist, write to apps/backend/evals/runs/topic_modelling_runs
-        //   // __dirname is expected to be .../apps/backend/sensemaking-tools/library/dist/src/tasks
-        //   const runsDir = path.join(
-        //     __dirname,
-        //     "../../../../../evals/runs/topic_modelling_runs_overwrite"
-        //   );
-        //   fs.mkdirSync(runsDir, { recursive: true });
-        //   // Determine next numeric file id
-        //   const files = fs.readdirSync(runsDir);
-        //   const numericIds = files
-        //     .map((name) => (name.match(/^(\d+)\.json$/)?.[1] ? Number(RegExp.$1) : null))
-        //     .filter((n): n is number => typeof n === "number" && Number.isFinite(n));
-        //   const nextId = (numericIds.length ? Math.max(...numericIds) : 0) + 1;
-        //   const outPath = path.join(runsDir, `${nextId}.json`);
-        //   const fileContent = [
-        //     {
-        //       prompt: [
-        //         {
-        //           task: "You are an expert in socio-economic development, policy evaluation, and data-driven governance. Your task is to suggest metrics that are: Relevant to the given socio-economic factor, Reliable (commonly used, validated, or recognized in research and policy), Locally trackable - can be collected at a city, municipal, or community level using available data sources. Avoid abstract concepts that cannot be measured. Avoid metrics that require data that would be difficult to obtain. E.g. Perception of safety in public spaces (measured through surveys), Percentage of housing units with adequate natural light, Community satisfaction with space management (measured through surveys), Percentage of population that can correctly identify at least three causes of climate change",                factor: factor,
-        //           comments: comments.map((c) => c.text),
-        //         },
-        //       ],
-        //       response: llmOutput,
-        //     },
-        //   ];
-        //   fs.writeFileSync(outPath, JSON.stringify(fileContent, null, 2), "utf-8");
-        // } catch (e) {
-        //   // Best-effort; do not interrupt the main flow
-        //   console.warn("Failed to write topic_modelling_runs file:", e);
-        // }
-        // console.log('llmOutput:')
-        // console.dir(llmOutput, {depth:null})
         return llmOutput;
       });
     },
@@ -263,12 +219,12 @@ function learnedTopicsValid(response, parentTopic) {
     if (!topicNames.every((name) => allowedTopicNames.includes(name.toLowerCase()))) {
       topicNames.forEach((topicName) => {
         if (!allowedTopicNames.includes(topicName.toLowerCase())) {
-          console.warn(
-            "Invalid response: Found top-level topic not present in the provided topics. Provided topics: ",
-            allowedTopicNames,
-            " Found topic: ",
-            topicName
-          );
+          // console.warn(
+          //   "Invalid response: Found top-level topic not present in the provided topics. Provided topics: ",
+          //   allowedTopicNames,
+          //   " Found topic: ",
+          //   topicName
+          // );
         }
       });
       return false;
@@ -280,9 +236,9 @@ function learnedTopicsValid(response, parentTopic) {
       "subtopics" in topic ? topic.subtopics.map((subtopic) => subtopic.name) : [];
     for (const subtopicName of subtopicNames) {
       if (topicNames.includes(subtopicName) && subtopicName !== "Other") {
-        console.warn(
-          `Invalid response: Subtopic "${subtopicName}" has the same name as a main topic.`
-        );
+        // console.warn(
+        //   `Invalid response: Subtopic "${subtopicName}" has the same name as a main topic.`
+        // );
         return false;
       }
     }

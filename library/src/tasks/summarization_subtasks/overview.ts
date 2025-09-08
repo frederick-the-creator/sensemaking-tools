@@ -107,7 +107,7 @@ export class OverviewSummary extends RecursiveSummary<OverviewInput> {
     );
     return await retryCall(
       async function (model, prompt) {
-        console.log(`Generating OVERVIEW SUMMARY in one shot`);
+        // console.log(`Generating OVERVIEW SUMMARY in one shot`);
         let result = await model.generateText(prompt);
         result = removeEmptyLines(result);
         if (!result) {
@@ -142,7 +142,7 @@ export class OverviewSummary extends RecursiveSummary<OverviewInput> {
           `  </topicsSummary>`,
         this.additionalContext
       );
-      console.log(`Generating OVERVIEW SUMMARY for topic: "${topicStats.name}"`);
+      // console.log(`Generating OVERVIEW SUMMARY for topic: "${topicStats.name}"`);
       text += (await this.model.generateText(prompt)).trim() + "\n";
     }
     return text;
@@ -207,12 +207,12 @@ export function isMdListValid(mdList: string, topicNames: string[]): boolean {
     // - **Topic Name**:  A summary.
     // - __Topic Name__:  A summary.
     if (!line.match(/^[\*\-]\s+\*\*.*:?\*\*:?\s/) && !line.match(/^[\*\-]\s+\_\_.*:?\_\_:?\s/)) {
-      console.log("Line does not match expected format:", line);
+      // console.log("Line does not match expected format:", line);
       return false;
     }
     // Check to make sure that every single topicName in topicNames is in the list, and in the right order
     if (!line.includes(topicNames[index])) {
-      console.log(`Topic "${topicNames[index]}" not found at line:\n`, line);
+      // console.log(`Topic "${topicNames[index]}" not found at line:\n`, line);
       return false;
     }
   }

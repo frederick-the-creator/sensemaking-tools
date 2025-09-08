@@ -64,7 +64,7 @@ export async function retryCall<T>(
     // Exponential backoff calculation
     const backoffGrowthRate = 1; // controls how quickly delay increases b/w retries (higher value = faster increase)
     const delay = retryDelayMS * Math.pow(backoffGrowthRate, attempt - 1);
-    console.log(`Retrying in ${delay / 1000} seconds (attempt ${attempt})`);
+    // console.log(`Retrying in ${delay / 1000} seconds (attempt ${attempt})`);
     await new Promise((resolve) => setTimeout(resolve, delay));
   }
   throw new Error(`Failed after ${maxRetries} attempts: ${errorMsg}`);
@@ -183,7 +183,7 @@ export function groupCommentsBySubtopic(categorized: Comment[]): {
   } = {};
   for (const comment of categorized) {
     if (!comment.topics || comment.topics.length === 0) {
-      console.log(`Comment with ID ${comment.id} has no topics assigned.`);
+      // console.log(`Comment with ID ${comment.id} has no topics assigned.`);
       continue;
     }
     for (const topic of comment.topics) {

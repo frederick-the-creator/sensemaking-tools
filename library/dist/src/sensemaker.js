@@ -193,9 +193,6 @@ class Sensemaker {
       if (!includeSubtopics && topicDepth && topicDepth > 1) {
         throw Error("topicDepth can only be set when includeSubtopics is true");
       }
-      // TODO: ensure the topics argument and the topics assigned to the passed in comments are in
-      // sync.
-      // console.log("Sensemaker sensemaker.ts - Begin recursive categorisation");
       const categorizedComments = yield (0, categorization_1.categorizeCommentsRecursive)(
         comments,
         includeSubtopics ? topicDepth || 2 : 1,
@@ -212,7 +209,6 @@ class Sensemaker {
         prompt_categorise_comments_metrics,
         metricCategorizationFlag
       );
-      // console.log(`Categorization took ${(performance.now() - startTime) / (1000 * 60)} minutes.`);
       return categorizedComments;
     });
   }
